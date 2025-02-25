@@ -7,6 +7,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include<stb_image.h>
 
+const Texture::Descriptor Texture::DefaultDescriptor = {};
+
 void Texture::InitializeTexture(void* textureBuffer) {
 	GLCALL(glBindTexture(GL_TEXTURE_2D, TextureId));
 	GLCALL(glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, desc.BorderColour.data()));
@@ -48,7 +50,7 @@ Texture::Texture(const std::filesystem::path& Path, const Descriptor& desc)
 
 	if (glIsTexture(TextureId) == GL_FALSE) {
 		ERRORLOG("InvalidTextureId");
-		__debugbreak();
+		raise(SIGTRAP);
 	}
 
 	stbi_image_free(textureBuffer);
@@ -190,23 +192,23 @@ FrameBufferObject::FrameBufferObject(Texture* texture) :texture(texture) {
 		case GL_FRAMEBUFFER_UNDEFINED:
 			// The default framebuffer does not exist
 			o << "Framebuffer error: Default framebuffer does not exist" << std::endl;
-			__debugbreak();
+			raise(SIGTRAP);
 			break;
 		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
 			// One or more framebuffer attachments are incomplete or not attached
 			o << "Framebuffer error: Incomplete attachment" << std::endl;
-			__debugbreak();
+			raise(SIGTRAP);
 			break;
 		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
 			// No images are attached to the framebuffer
 			o << "Framebuffer error: No attachments" << std::endl;
-			__debugbreak();
+			raise(SIGTRAP);
 			break;
 			// Add more cases for other possible error codes as needed
 		default:
 			// Unknown error
 			o << "Framebuffer error: Unknown error" << std::endl;
-			__debugbreak();
+			raise(SIGTRAP);
 			break;
 		}
 	}

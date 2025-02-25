@@ -62,10 +62,13 @@ public:
 private:
 
 	void InitializeTexture(void* textureBuffer);
+
+	static const Descriptor DefaultDescriptor;
 public:
-	Texture(const std::filesystem::path& Path, const Descriptor& desc = {});
-	Texture(int Width, int Height, void* pixels = nullptr, const Descriptor& desc = {});
-	Texture(const wxImage& Image, const Descriptor& desc = {});
+
+	Texture(const std::filesystem::path& Path, const Descriptor& desc = DefaultDescriptor);
+	Texture(int Width, int Height, void* pixels = nullptr, const Descriptor& desc = DefaultDescriptor);
+	Texture(const wxImage& Image, const Descriptor& desc = DefaultDescriptor);
 
 	Texture(const Texture&) = delete;
 	Texture(Texture&&) = delete;
