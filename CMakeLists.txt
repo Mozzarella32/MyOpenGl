@@ -17,7 +17,8 @@ if (NOT wxWidgets_FOUND)
     set(wxBUILD_TESTS OFF)
     set(wxBUILD_DEMOS OFF)
     set(wxBUILD_EXAMPLES OFF)
-    set(wxUSE_STL OFF)
+
+    set(WX_CFG_FLAGS "wxUSE_STD=0")
 
     message(STATUS "Fetching wxWidgets...")
     FetchContent_Declare(
