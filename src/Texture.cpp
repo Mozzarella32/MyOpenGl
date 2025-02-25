@@ -7,6 +7,17 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include<stb_image.h>
 
+
+#ifdef _WIN32
+#include <windows.h>
+#define TRAP() DebugBreak()
+#elif defined(__linux__)
+#include <signal.h>
+#define TRAP() raise(SIGTRAP)
+#else
+#error "Platform not supported for TRAP()"
+#endif
+
 const Texture::Descriptor Texture::DefaultDescriptor = {};
 
 void Texture::InitializeTexture(void* textureBuffer) {
@@ -50,7 +61,7 @@ Texture::Texture(const std::filesystem::path& Path, const Descriptor& desc)
 
 	if (glIsTexture(TextureId) == GL_FALSE) {
 		ERRORLOG("InvalidTextureId");
-		raise(SIGTRAP);
+		TRAP();
 	}
 
 	stbi_image_free(textureBuffer);
@@ -192,23 +203,23 @@ FrameBufferObject::FrameBufferObject(Texture* texture) :texture(texture) {
 		case GL_FRAMEBUFFER_UNDEFINED:
 			// The default framebuffer does not exist
 			o << "Framebuffer error: Default framebuffer does not exist" << std::endl;
-			raise(SIGTRAP);
+			TRAP();
 			break;
 		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
 			// One or more framebuffer attachments are incomplete or not attached
 			o << "Framebuffer error: Incomplete attachment" << std::endl;
-			raise(SIGTRAP);
+			TRAP();
 			break;
 		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
 			// No images are attached to the framebuffer
 			o << "Framebuffer error: No attachments" << std::endl;
-			raise(SIGTRAP);
+			TRAP();
 			break;
 			// Add more cases for other possible error codes as needed
 		default:
 			// Unknown error
 			o << "Framebuffer error: Unknown error" << std::endl;
-			raise(SIGTRAP);
+			TRAP();
 			break;
 		}
 	}

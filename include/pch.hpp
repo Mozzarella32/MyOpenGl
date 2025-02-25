@@ -15,7 +15,6 @@
 #include <assert.h>
 #include <algorithm>
 #include <array>
-
 #include <wx/glcanvas.h>
 
 #include <wx/image.h>
