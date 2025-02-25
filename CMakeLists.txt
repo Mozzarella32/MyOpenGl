@@ -17,14 +17,15 @@ if (NOT wxWidgets_FOUND)
     set(wxBUILD_TESTS OFF)
     set(wxBUILD_DEMOS OFF)
     set(wxBUILD_EXAMPLES OFF)
-
-    set(WX_CFG_FLAGS "wxUSE_STD_CONTAINERS=0")
-
+    
     message(STATUS "Fetching wxWidgets...")
     FetchContent_Declare(
        wxWidgets
        GIT_REPOSITORY https://github.com/wxWidgets/wxWidgets.git
        GIT_SHALLOW ON
+       CMAKE_ARGS
+           -DwxUSE_STD=0
+
     )
     FetchContent_MakeAvailable(wxWidgets)
 else()
