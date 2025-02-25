@@ -25,7 +25,6 @@ if (NOT wxWidgets_FOUND)
        GIT_SHALLOW ON
        CMAKE_ARGS
            -DwxUSE_STD=0
-
     )
     FetchContent_MakeAvailable(wxWidgets)
 else()
