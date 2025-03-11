@@ -43,6 +43,7 @@ public:
 		GLint Swizzle_B = GL_BLUE;
 		GLint Swizzle_A = GL_ALPHA;
 
+		GLenum Format = GL_RGBA;
 		GLenum Internal_Format = GL_RGBA;
 
 		GLfloat Min_LOD = -1000.0f;
