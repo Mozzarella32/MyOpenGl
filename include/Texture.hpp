@@ -114,13 +114,13 @@ public:
 private:
 
 	GLuint FramebufferId = 0;
-	static inline GLenum DrawBuffers[1] = { GL_COLOR_ATTACHMENT0 };
 
 	BindMode LastBind = ReadDraw;
 
-	Texture* texture;
+	std::vector<Texture*> textures;
+	std::vector<GLenum> attatchments;
 public:
-	FrameBufferObject(Texture* texture);
+	FrameBufferObject(const std::vector<Texture*>& textures, const std::vector<GLenum>& attatchments = { GL_COLOR_ATTACHMENT0 });
 
 	FrameBufferObject(const FrameBufferObject&) = delete;
 	FrameBufferObject(FrameBufferObject&&) = delete;
@@ -134,5 +134,10 @@ public:
 
 	GLuint GetId() const;
 
-	Texture* GetTexture() const;
+	//Has been Removed
+	//Texture* GetTexture() const;
+
+	std::vector<Texture*> GetTextures() const;
+
+	std::vector<GLenum> GetAttatchments() const;
 };
