@@ -7,8 +7,16 @@ void _GLGetError(const char* file, int line, const char* call) {
 	//while (GLenum error = glGetError()) {
 	GLenum error = glGetError();
 	if (error) {
-		o << "[OpenGL GLCALL Error] " << gluErrorString(error) << " in " << file << ":" << line << " Call: " << call << std::endl;
-	}
+
+		auto Error = gluErrorString(error);
+		if (Error) {
+			o << "[OpenGL GLCALL Error] " << Error << " in " << file << ":" << line << " Call: " << call << std::endl;
+		}
+		else {
+			o << "[OpenGL GLCALL Error] " << "glueErrorString returned nullptr" << " in " << file << ":" << line << " Call: " << call << std::endl;
+
+		}
+		}
 	else {
 		o << "[OpenGL GLCALL Sucess] Call: " << call << " in " << file << ":" << line << std::endl;
 	}
