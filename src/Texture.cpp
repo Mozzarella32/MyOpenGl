@@ -43,7 +43,7 @@ void Texture::InitializeTexture(void* textureBuffer) {
 
 	GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_DEPTH_STENCIL_TEXTURE_MODE, desc.Depth_Stencil_Texture_Mode));
 
-	GLCALL(glTexImage2D(GL_TEXTURE_2D, 0, desc.Internal_Format, Width, Height, 0, desc.Internal_Format, GL_UNSIGNED_BYTE, textureBuffer));
+	GLCALL(glTexImage2D(GL_TEXTURE_2D, 0, desc.Internal_Format, Width, Height, 0, desc.Format, GL_UNSIGNED_BYTE, textureBuffer));
 
 	if (desc.Generate_Mipmaps) {
 		GLCALL(glGenerateMipmap(GL_TEXTURE_2D));
