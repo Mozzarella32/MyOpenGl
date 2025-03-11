@@ -49,6 +49,28 @@ void Texture::InitializeTexture(void* textureBuffer) {
 		GLCALL(glGenerateMipmap(GL_TEXTURE_2D));
 	}
 
+	if (desc.Depth_Stencil_Texture_Mode != 0) { 
+		GLuint renderbuffer;
+		GLCALL(glGenRenderbuffers(1, &renderbuffer));
+		GLCALL(glBindRenderbuffer(GL_RENDERBUFFER, renderbuffer));
+
+		if (desc.Depth_Stencil_Texture_Mode == GL_DEPTH_COMPONENT) {
+			GLCALL(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, Width, Height)); 
+		}
+		else if (desc.Depth_Stencil_Texture_Mode == GL_DEPTH24_STENCIL8) {
+			GLCALL(glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, Width, Height));
+		}
+		else if (desc.Depth_Stencil_Texture_Mode == GL_STENCIL_INDEX8) {
+			GLCALL(glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, Width, Height)); 
+		}
+
+		GLCALL(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbuffer));
+		GLCALL(glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderbuffer));
+
+		GLCALL(glBindRenderbuffer(GL_RENDERBUFFER, 0));
+	}
+
+
 	GLCALL(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
