@@ -210,11 +210,19 @@ GLuint Texture::GetId() const {
 	return TextureId;
 }
 
-FrameBufferObject::FrameBufferObject(Texture* texture) :texture(texture) {
+FrameBufferObject::FrameBufferObject(const std::vector<Texture*>& textures, const std::vector<GLenum>& attatchments)
+	:textures(textures), attatchments(attatchments) {
+	if (textures.size() != attatchments.size()) {
+		std::ofstream o("Error.log", std::ios::app);
+		o << "Framebuffer error: Textures and attatchments size mismatch" << std::endl;
+		TRAP();
+	}
 	GLCALL(glGenFramebuffers(1, &FramebufferId));
 	GLCALL(glBindFramebuffer(GL_FRAMEBUFFER, FramebufferId));
-	GLCALL(glDrawBuffers(1, DrawBuffers));
-	GLCALL(glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture->TextureId, 0));
+	GLCALL(glDrawBuffers(1, attatchments.data()));
+	for (size_t i = 0; i < textures.size(); i++) {
+		GLCALL(glFramebufferTexture2D(GL_FRAMEBUFFER, attatchments[i], GL_TEXTURE_2D, textures[i]->TextureId, 0));
+	}
 	auto status = GLCALL(glCheckFramebufferStatus(GL_FRAMEBUFFER));
 	if (status != GL_FRAMEBUFFER_COMPLETE) {
 		std::ofstream o("Error.log", std::ios::app);
@@ -291,6 +299,16 @@ GLuint FrameBufferObject::GetId() const {
 	return FramebufferId;
 }
 
-Texture* FrameBufferObject::GetTexture() const {
-	return texture;
+//
+//Texture* FrameBufferObject::GetTexture() const {
+//	return texture;
+//}
+
+std::vector<Texture*> FrameBufferObject::GetTextures() const {
+	return textures;
+}
+
+
+std::vector<GLenum> FrameBufferObject::GetAttatchments() const {
+	return attatchments;
 }
