@@ -46,6 +46,8 @@ public:
 		GLenum Format = GL_RGBA;
 		GLenum Internal_Format = GL_RGBA;
 
+		GLenum Type = GL_UNSIGNED_BYTE;
+
 		GLfloat Min_LOD = -1000.0f;
 		GLfloat Max_LOD = 1000.0f;
 		GLfloat LOD_Bias = 0.0f;
