@@ -197,7 +197,15 @@ FrameBufferObject::FrameBufferObject(const std::vector<Texture*>& textures, cons
 	}
 	GLCALL(glGenFramebuffers(1, &FramebufferId));
 	GLCALL(glBindFramebuffer(GL_FRAMEBUFFER, FramebufferId));
-	GLCALL(glDrawBuffers(attatchments.size(), attatchments.data()));
+
+	std::vector<GLenum> ActualAttatchments;
+	for (const GLenum& att : attatchments) {
+		if (att == GL_DEPTH_ATTACHMENT || att == GL_STENCIL_ATTACHMENT || att == GL_DEPTH_STENCIL_ATTACHMENT) continue;
+		ActualAttatchments.push_back(att);
+	}
+
+	GLCALL(glDrawBuffers(ActualAttatchments.size(), ActualAttatchments.data()));
+
 	for (size_t i = 0; i < textures.size(); i++) {
 		GLCALL(glFramebufferTexture2D(GL_FRAMEBUFFER, attatchments[i], GL_TEXTURE_2D, textures[i]->TextureId, 0));
 	}
