@@ -197,7 +197,7 @@ FrameBufferObject::FrameBufferObject(const std::vector<Texture*>& textures, cons
 	}
 	GLCALL(glGenFramebuffers(1, &FramebufferId));
 	GLCALL(glBindFramebuffer(GL_FRAMEBUFFER, FramebufferId));
-	GLCALL(glDrawBuffers(1, attatchments.data()));
+	GLCALL(glDrawBuffers(attatchments.size(), attatchments.data()));
 	for (size_t i = 0; i < textures.size(); i++) {
 		GLCALL(glFramebufferTexture2D(GL_FRAMEBUFFER, attatchments[i], GL_TEXTURE_2D, textures[i]->TextureId, 0));
 	}
