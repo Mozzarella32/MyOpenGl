@@ -116,3 +116,10 @@ GLAPI void GLAPIENTRY glFramebufferTexture2D(	GLenum target,
  	GLuint texture,
  	GLint level);
 
+GLAPI void GLAPIENTRY glVertexAttribIPointer( 	GLuint index,
+  	GLint size,
+  	GLenum type,
+  	GLsizei stride,
+  	const void * pointer);
+
+
