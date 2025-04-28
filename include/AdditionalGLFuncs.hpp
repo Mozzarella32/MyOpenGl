@@ -61,12 +61,152 @@ GLAPI void GLAPIENTRY glDrawArraysInstanced( 	GLenum mode,
   	GLsizei count,
   	GLsizei instancecount);
 
-GLAPI void GLAPIENTRY glUniform1i( 	GLint location,
-  	GLint v0);
-
+GLAPI void GLAPIENTRY glUniform1f( 	GLint location,
+  	GLfloat v0);
+ 
 GLAPI void GLAPIENTRY glUniform2f( 	GLint location,
   	GLfloat v0,
   	GLfloat v1);
+ 
+GLAPI void GLAPIENTRY glUniform3f( 	GLint location,
+  	GLfloat v0,
+  	GLfloat v1,
+  	GLfloat v2);
+ 
+GLAPI void GLAPIENTRY glUniform4f( 	GLint location,
+  	GLfloat v0,
+  	GLfloat v1,
+  	GLfloat v2,
+  	GLfloat v3);
+ 
+GLAPI void GLAPIENTRY glUniform1i( 	GLint location,
+  	GLint v0);
+ 
+GLAPI void GLAPIENTRY glUniform2i( 	GLint location,
+  	GLint v0,
+  	GLint v1);
+ 
+GLAPI void GLAPIENTRY glUniform3i( 	GLint location,
+  	GLint v0,
+  	GLint v1,
+  	GLint v2);
+ 
+GLAPI void GLAPIENTRY glUniform4i( 	GLint location,
+  	GLint v0,
+  	GLint v1,
+  	GLint v2,
+  	GLint v3);
+ 
+GLAPI void GLAPIENTRY glUniform1ui( 	GLint location,
+  	GLuint v0);
+ 
+GLAPI void GLAPIENTRY glUniform2ui( 	GLint location,
+  	GLuint v0,
+  	GLuint v1);
+ 
+GLAPI void GLAPIENTRY glUniform3ui( 	GLint location,
+  	GLuint v0,
+  	GLuint v1,
+  	GLuint v2);
+ 
+GLAPI void GLAPIENTRY glUniform4ui( 	GLint location,
+  	GLuint v0,
+  	GLuint v1,
+  	GLuint v2,
+  	GLuint v3);
+ 
+GLAPI void GLAPIENTRY glUniform1fv( 	GLint location,
+  	GLsizei count,
+  	const GLfloat *value);
+ 
+GLAPI void GLAPIENTRY glUniform2fv( 	GLint location,
+  	GLsizei count,
+  	const GLfloat *value);
+ 
+GLAPI void GLAPIENTRY glUniform3fv( 	GLint location,
+  	GLsizei count,
+  	const GLfloat *value);
+ 
+GLAPI void GLAPIENTRY glUniform4fv( 	GLint location,
+  	GLsizei count,
+  	const GLfloat *value);
+ 
+GLAPI void GLAPIENTRY glUniform1iv( 	GLint location,
+  	GLsizei count,
+  	const GLint *value);
+ 
+GLAPI void GLAPIENTRY glUniform2iv( 	GLint location,
+  	GLsizei count,
+  	const GLint *value);
+ 
+GLAPI void GLAPIENTRY glUniform3iv( 	GLint location,
+  	GLsizei count,
+  	const GLint *value);
+ 
+GLAPI void GLAPIENTRY glUniform4iv( 	GLint location,
+  	GLsizei count,
+  	const GLint *value);
+ 
+GLAPI void GLAPIENTRY glUniform1uiv( 	GLint location,
+  	GLsizei count,
+  	const GLuint *value);
+ 
+GLAPI void GLAPIENTRY glUniform2uiv( 	GLint location,
+  	GLsizei count,
+  	const GLuint *value);
+ 
+GLAPI void GLAPIENTRY glUniform3uiv( 	GLint location,
+  	GLsizei count,
+  	const GLuint *value);
+ 
+GLAPI void GLAPIENTRY glUniform4uiv( 	GLint location,
+  	GLsizei count,
+  	const GLuint *value);
+ 
+GLAPI void GLAPIENTRY glUniformMatrix2fv( 	GLint location,
+  	GLsizei count,
+  	GLboolean transpose,
+  	const GLfloat *value);
+ 
+GLAPI void GLAPIENTRY glUniformMatrix3fv( 	GLint location,
+  	GLsizei count,
+  	GLboolean transpose,
+  	const GLfloat *value);
+ 
+GLAPI void GLAPIENTRY glUniformMatrix4fv( 	GLint location,
+  	GLsizei count,
+  	GLboolean transpose,
+  	const GLfloat *value);
+ 
+GLAPI void GLAPIENTRY glUniformMatrix2x3fv( 	GLint location,
+  	GLsizei count,
+  	GLboolean transpose,
+  	const GLfloat *value);
+ 
+GLAPI void GLAPIENTRY glUniformMatrix3x2fv( 	GLint location,
+  	GLsizei count,
+  	GLboolean transpose,
+  	const GLfloat *value);
+ 
+GLAPI void GLAPIENTRY glUniformMatrix2x4fv( 	GLint location,
+  	GLsizei count,
+  	GLboolean transpose,
+  	const GLfloat *value);
+ 
+GLAPI void GLAPIENTRY glUniformMatrix4x2fv( 	GLint location,
+  	GLsizei count,
+  	GLboolean transpose,
+  	const GLfloat *value);
+ 
+GLAPI void GLAPIENTRY glUniformMatrix3x4fv( 	GLint location,
+  	GLsizei count,
+  	GLboolean transpose,
+  	const GLfloat *value);
+ 
+GLAPI void GLAPIENTRY glUniformMatrix4x3fv( 	GLint location,
+  	GLsizei count,
+  	GLboolean transpose,
+  	const GLfloat *value);
 
 GLAPI void GLAPIENTRY glEnableVertexAttribArray( 	GLuint index);
 
