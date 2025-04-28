@@ -1,20 +1,8 @@
 #pragma once
 
-// #include <GL/glew.h>
-
-
-// #ifdef _WIN32
-    // #include <GL/GL.h>
-// #else
-    // #include <GL/gl.h>
-// #endif
-
-// #include "AdditionalGLFuncs.hpp"
-
 #include <glad/gl.h>
 
 #include <cstddef> 
-// #include <stddef.h>
 #include <vector>
 #include <string>
 #include <filesystem>
