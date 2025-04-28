@@ -122,4 +122,16 @@ GLAPI void GLAPIENTRY glVertexAttribIPointer( 	GLuint index,
   	GLsizei stride,
   	const void * pointer);
 
+GLAPI const GLubyte * GLAPIENTRY gluErrorString(	GLenum error);
+
+GLAPI void GLAPIENTRY glNamedBufferData( 	GLuint buffer,
+  	GLsizeiptr size,
+  	const void *data,
+  	GLenum usage);
+
+GLAPI void GLAPIENTRY glNamedBufferSubData( 	GLuint buffer,
+  	GLintptr offset,
+  	GLsizeiptr size,
+  	const void *data);
+
 
