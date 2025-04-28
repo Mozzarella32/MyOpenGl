@@ -9,10 +9,12 @@
     // #include <GL/gl.h>
 // #endif
 
-#include "AdditionalGLFuncs.hpp"
+// #include "AdditionalGLFuncs.hpp"
 
-#include <stddef.h> 
- #include <cstddef>
+#include <glad/gl.h>
+
+#include <cstddef> 
+// #include <stddef.h>
 #include <vector>
 #include <string>
 #include <filesystem>
@@ -21,7 +23,7 @@
 #include <unordered_map>
 #include <functional>
 #include <numeric>
-#include <assert.h>
+#include <cassert>
 #include <algorithm>
 #include <array>
 #include <wx/glcanvas.h>

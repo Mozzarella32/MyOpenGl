@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 
-project(MyOpenGl)
+project(MyOpenGl LANGUAGES C CXX)
 
 include(FetchContent)
 
@@ -66,6 +66,13 @@ FetchContent_MakeAvailable(stb)
 
 set(STB_INCLUDE_DIR ${stb_SOURCE_DIR})
 
+# GLAD
+set(GLAD_SOURCE_DIR "${PROJECT_SOURCE_DIR}/thirdparty/glad/src")
+set(GLAD_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/thirdparty/glad/include")
+
+file(GLOB_RECURSE GLAD_SOURCE CONFIGURE_DEPENDS "${GLAD_SOURCE_DIR}/*")
+
+
 # Directories
 set(SRC_DIR "${PROJECT_SOURCE_DIR}/src")
 set(INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
@@ -84,13 +91,13 @@ list(REMOVE_ITEM MY_SOURCE ${PCH_HEADERS})
 list(REMOVE_ITEM MY_HEADERS ${PCH_HEADERS})
 
 # Statische Bibliothek erstellen
-add_library(${PROJECT_NAME} STATIC ${MY_SOURCE})
+add_library(${PROJECT_NAME} STATIC ${MY_SOURCE}  ${GLAD_SOURCE})
 
 # Precompiled Header (falls verwendet)
-target_precompile_headers(${PROJECT_NAME} PRIVATE ${PCH_HEADERS})
+target_precompile_headers(${PROJECT_NAME} PRIVATE  $<$<COMPILE_LANGUAGE:CXX>:${PCH_HEADERS}>)
 
 # Include-Direktiven
-target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR} ${STB_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR} ${STB_INCLUDE_DIR} ${GLAD_INCLUDE_DIR})
 
 # wxWidgets Linking
 target_link_libraries(${PROJECT_NAME} PUBLIC wx::net wx::core wx::base)
