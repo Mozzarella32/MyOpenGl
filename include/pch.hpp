@@ -1,6 +1,15 @@
 #pragma once
 
-#include <GL/glew.h>
+// #include <GL/glew.h>
+
+
+// #ifdef _WIN32
+    // #include <GL/GL.h>
+// #else
+    // #include <GL/gl.h>
+// #endif
+
+#include "AdditionalGLFuncs.hpp"
 
 #include <stddef.h> 
  #include <cstddef>
