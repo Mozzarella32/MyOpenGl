@@ -275,3 +275,14 @@ GLAPI void GLAPIENTRY glNamedBufferSubData( 	GLuint buffer,
   	const void *data);
 
 
+GLAPI void GLAPIENTRY glClearTexImage( 	GLuint texture,
+  	GLint level,
+  	GLenum format,
+  	GLenum type,
+  	const void * data);
+
+GLAPI void GLAPIENTRY glClearTexImage( 	GLuint texture,
+  	GLint level,
+  	GLenum format,
+  	GLenum type,
+  	const void * data);
