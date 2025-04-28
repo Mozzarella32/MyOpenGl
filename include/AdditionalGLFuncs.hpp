@@ -286,3 +286,15 @@ GLAPI void GLAPIENTRY glClearTexImage( 	GLuint texture,
   	GLenum format,
   	GLenum type,
   	const void * data);
+
+
+GLAPI void GLAPIENTRY glBlitFramebuffer( 	GLint srcX0,
+  	GLint srcY0,
+  	GLint srcX1,
+  	GLint srcY1,
+  	GLint dstX0,
+  	GLint dstY0,
+  	GLint dstX1,
+  	GLint dstY1,
+  	GLbitfield mask,
+  	GLenum filter);
