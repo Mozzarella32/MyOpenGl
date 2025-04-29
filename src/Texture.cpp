@@ -220,22 +220,26 @@ FrameBufferObject::FrameBufferObject(const std::vector<Texture*>& textures, cons
 		case GL_FRAMEBUFFER_UNDEFINED:
 			// The default framebuffer does not exist
 			o << "Framebuffer error: Default framebuffer does not exist" << std::endl;
+			o.close();
 			TRAP();
 			break;
 		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
 			// One or more framebuffer attachments are incomplete or not attached
 			o << "Framebuffer error: Incomplete attachment" << std::endl;
+			o.close();
 			TRAP();
 			break;
 		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
 			// No images are attached to the framebuffer
 			o << "Framebuffer error: No attachments" << std::endl;
+			o.close();
 			TRAP();
 			break;
 			// Add more cases for other possible error codes as needed
 		default:
 			// Unknown error
 			o << "Framebuffer error: Unknown error" << std::endl;
+			o.close();
 			TRAP();
 			break;
 		}
