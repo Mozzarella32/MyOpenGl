@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "pch.hpp"
 
-#ifdef _DEBUG
+#ifndef NDEBUG
 
 extern void _GLGetError(const char* file, int line, const char* call);
 

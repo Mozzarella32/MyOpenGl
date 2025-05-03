@@ -1,6 +1,6 @@
 #include "Utilities.hpp"
 
-#ifdef _DEBUG
+#ifndef NDEBUG
 
 void _GLGetError(const char* file, int line, const char* call) {
 	std::ofstream o("Error.log", std::ios::app);

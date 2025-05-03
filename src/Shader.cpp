@@ -90,7 +90,7 @@ Shader::Shader(ErrorHandler err, const std::string& vertexShader, const std::str
 		GLCALL(glDeleteProgram(shaderId));
 		return;
 	}
-#ifdef _DEBUG
+#ifndef NDEBUG
 	GLCALL(glDetachShader(shaderId, vs));
 	GLCALL(glDetachShader(shaderId, fs));
 	if (!geometryShader.empty()) {
@@ -167,7 +167,7 @@ void Shader::bind() {
 }
 
 void Shader::unbind() {
-#ifdef _DEBUG
+#ifndef NDEBUG
 	GLCALL(glUseProgram(0));
 #endif
 }

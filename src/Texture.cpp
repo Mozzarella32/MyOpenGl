@@ -167,7 +167,7 @@ void Texture::bind() {
 }
 
 void Texture::unbind() {
-#ifdef _DEBUG
+#ifndef NDEBUG
 	GLCALL(glActiveTexture(GL_TEXTURE0));
 	GLCALL(glBindTexture(GL_TEXTURE_2D, 0));
 #endif

@@ -13,15 +13,14 @@ VertexArrayObject::VertexArrayObject(std::vector<VertexBufferObjectDescriptor> I
 
 		BufferDescriptor.PrepareVBO(AttributePosition);
 
-#ifdef _DEBUG
+#ifndef NDEBUG
 		GLCALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
 #endif
 	}
-#ifdef _DEBUG
+#ifndef NDEBUG
 	GLCALL(glBindVertexArray(0));
 #endif
 }
-
 
 VertexArrayObject::VertexArrayObject(VertexArrayObject&& Other) noexcept
 	:VAO(std::move(Other.VAO)), BufferDescriptors(std::move(Other.BufferDescriptors))  {
@@ -48,7 +47,7 @@ void VertexArrayObject::bind() {
 }
 
 void VertexArrayObject::unbind() {
-#ifdef _DEBUG
+#ifndef NDEBUG
 	GLCALL(glBindVertexArray(0));
 #endif
 }
