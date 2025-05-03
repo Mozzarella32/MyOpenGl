@@ -97,7 +97,7 @@ add_library(${PROJECT_NAME} STATIC ${MY_SOURCE}  ${GLAD_SOURCE})
 target_precompile_headers(${PROJECT_NAME} PRIVATE  $<$<COMPILE_LANGUAGE:CXX>:${PCH_HEADERS}>)
 
 # Include-Direktiven
-target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR} ${STB_INCLUDE_DIR} ${GLAD_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR} ${STB_INCLUDE_DIR})
 
 # wxWidgets Linking
 target_link_libraries(${PROJECT_NAME} PUBLIC wx::net wx::core wx::base)
