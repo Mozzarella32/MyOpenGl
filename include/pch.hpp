@@ -1,6 +1,7 @@
 #pragma once
 
-#include <glad/gl.h>
+// #include <glad/gl.h>
+#include <GL/glew.h>
 
 #include <cstddef> 
 #include <vector>

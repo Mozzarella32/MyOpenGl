@@ -31,27 +31,27 @@ else()
     message(STATUS "wxWidgets Found")
 endif()
 
-# # GLEW
-# find_package(GLEW QUIET)
+# GLEW
+find_package(GLEW QUIET)
 
-# if (NOT GLEW_FOUND)
-#     message(STATUS "GLEW not found")
-#     message(STATUS "Fetching GLEW...")
+if (NOT GLEW_FOUND)
+    message(STATUS "GLEW not found")
+    message(STATUS "Fetching GLEW...")
 
-#     set(glew-cmake_BUILD_SHARED OFF)
-#     set(USE_GLU ON)
-#     # https://github.com/Perlmint/glew-cmake/blob/master/glew-cmake/fetch-content.cmake
-#     FetchContent_Declare(
-#        GLEW
-#        GIT_REPOSITORY https://github.com/Perlmint/glew-cmake
-#        GIT_SHALLOW ON
-#     )
-#     FetchContent_MakeAvailable(glew)
+    set(glew-cmake_BUILD_SHARED OFF)
+    set(USE_GLU ON)
+    # https://github.com/Perlmint/glew-cmake/blob/master/glew-cmake/fetch-content.cmake
+    FetchContent_Declare(
+       GLEW
+       GIT_REPOSITORY https://github.com/Perlmint/glew-cmake
+       GIT_SHALLOW ON
+    )
+    FetchContent_MakeAvailable(glew)
 
-#     #add_subdirectory(${glew_SOURCE_DIR} ${glew_BINARY_DIR} EXCLUDE_FROM_ALL)
-# else()
-#     message(STATUS "GLEW Found")
-# endif()
+    #add_subdirectory(${glew_SOURCE_DIR} ${glew_BINARY_DIR} EXCLUDE_FROM_ALL)
+else()
+    message(STATUS "GLEW Found")
+endif()
 
 # STB - Header-only-Bibliothek
 message(STATUS "Fetching stb...")
@@ -67,10 +67,10 @@ FetchContent_MakeAvailable(stb)
 set(STB_INCLUDE_DIR ${stb_SOURCE_DIR})
 
 # GLAD
-set(GLAD_SOURCE_DIR "${PROJECT_SOURCE_DIR}/thirdparty/glad/src")
-set(GLAD_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/thirdparty/glad/include")
+# set(GLAD_SOURCE_DIR "${PROJECT_SOURCE_DIR}/thirdparty/glad/src")
+# set(GLAD_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/thirdparty/glad/include")
 
-file(GLOB_RECURSE GLAD_SOURCE CONFIGURE_DEPENDS "${GLAD_SOURCE_DIR}/*")
+# file(GLOB_RECURSE GLAD_SOURCE CONFIGURE_DEPENDS "${GLAD_SOURCE_DIR}/*")
 
 
 # Directories
@@ -102,8 +102,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR} ${STB_INCLUDE_D
 # wxWidgets Linking
 target_link_libraries(${PROJECT_NAME} PUBLIC wx::net wx::core wx::base)
 
-# if (NOT GLEW_FOUND)
-    # target_link_libraries(${PROJECT_NAME} PRIVATE libglew_static)
-# else()
-    # target_link_libraries(${PROJECT_NAME} PUBLIC GLEW::glew_s)
-# endif()
+if (NOT GLEW_FOUND)
+    target_link_libraries(${PROJECT_NAME} PRIVATE libglew_static)
+else()
+    target_link_libraries(${PROJECT_NAME} PUBLIC GLEW::glew_s)
+endif()
