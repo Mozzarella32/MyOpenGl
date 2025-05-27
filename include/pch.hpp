@@ -5,6 +5,13 @@
 // #define GLEW_STATIC
 #include <GL/glew.h>
 
+
+// #ifdef GLEW_EGL
+	// static_assert(false && "EGL");
+// #else
+	// static_assert(false && "Not EGL");
+// #endif
+
 #include <cstddef> 
 #include <vector>
 #include <string>

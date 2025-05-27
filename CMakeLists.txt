@@ -40,15 +40,35 @@ if (NOT GLEW_FOUND)
 
     set(glew-cmake_BUILD_SHARED OFF)
     set(USE_GLU ON)
-    # https://github.com/Perlmint/glew-cmake/blob/master/glew-cmake/fetch-content.cmake
+    # set(GLEW_X11 OFF CACHE BOOL "" FORCE)
+    # set(GLEW_EGL ON CACHE BOOL "" FORCE)
     FetchContent_Declare(
        GLEW
-       GIT_REPOSITORY https://github.com/Perlmint/glew-cmake
+       GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
        GIT_SHALLOW ON
     )
+
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DGLEW_EGL")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGLEW_EGL")    
+
     FetchContent_MakeAvailable(glew)
 
-    #add_subdirectory(${glew_SOURCE_DIR} ${glew_BINARY_DIR} EXCLUDE_FROM_ALL)
+    # GLEW with modern CMake and options
+    # FetchContent_Declare(
+    #   glew
+    #   GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
+    #   GIT_TAG        master
+    # )
+
+    # # Tell GLEW to build statically, with EGL and without X11
+    # set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+    # set(GLEW_USE_STATIC_LIBS ON CACHE BOOL "" FORCE)
+    # set(GLEW_EGL ON CACHE BOOL "" FORCE)
+    # set(GLEW_NO_X11 ON CACHE BOOL "" FORCE)
+
+
+    # FetchContent_MakeAvailable(glew)
+    # #add_subdirectory(${glew_SOURCE_DIR} ${glew_BINARY_DIR} EXCLUDE_FROM_ALL)
 else()
     message(STATUS "GLEW Found")
 endif()
