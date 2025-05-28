@@ -13,20 +13,22 @@ find_package(wxWidgets QUIET)
 
 # if (NOT wxWidgets_FOUND)
     # message(STATUS "wxWidgets not found")
-    set(wxBUILD_SHARED OFF)
-    set(wxBUILD_TESTS OFF)
-    set(wxBUILD_DEMOS OFF)
-    set(wxBUILD_EXAMPLES OFF)
-    
-    message(STATUS "Fetching wxWidgets...")
-    FetchContent_Declare(
-       wxWidgets
-       GIT_REPOSITORY https://github.com/wxWidgets/wxWidgets.git
-       GIT_SHALLOW ON
-       CMAKE_ARGS
-           -DwxUSE_STD=0
-    )
-    FetchContent_MakeAvailable(wxWidgets)
+set(wxBUILD_SHARED OFF)
+set(wxBUILD_TESTS OFF)
+set(wxBUILD_DEMOS OFF)
+set(wxBUILD_EXAMPLES OFF)
+
+message(STATUS "Fetching wxWidgets...")
+FetchContent_Declare(
+   wxWidgets
+   GIT_REPOSITORY https://github.com/wxWidgets/wxWidgets.git
+
+   GIT_SHALLOW ON
+   CMAKE_ARGS
+       -DwxUSE_STD=0
+   GIT_PROGRESS TRUE
+)
+FetchContent_MakeAvailable(wxWidgets)
 # else()
     # message(STATUS "wxWidgets Found")
 # endif()
@@ -36,22 +38,25 @@ find_package(wxWidgets QUIET)
 
 # if (NOT GLEW_FOUND)
     # message(STATUS "GLEW not found")
-    message(STATUS "Fetching GLEW...")
+    # message(STATUS "Fetching GLEW...")
 
-    set(glew-cmake_BUILD_SHARED OFF)
-    set(USE_GLU ON)
+set(glew-cmake_BUILD_SHARED OFF)
+set(USE_GLU ON)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DGLEW_EGL")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGLEW_EGL")    
+
+add_subdirectory(${PROJECT_SOURCE_DIR}/submodules/glew-cmake)
+
     # set(GLEW_X11 OFF CACHE BOOL "" FORCE)
     # set(GLEW_EGL ON CACHE BOOL "" FORCE)
-    FetchContent_Declare(
-       GLEW
-       GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
-       GIT_SHALLOW ON
-    )
+    # FetchContent_Declare(
+    #    GLEW
+    #    GIT_REPOSITORY https://github.com/Perlmint/glew-cmake.git
+    #    GIT_SHALLOW ON
+    # )
 
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DGLEW_EGL")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGLEW_EGL")    
 
-    FetchContent_MakeAvailable(glew)
+    # FetchContent_MakeAvailable(glew)
 
     # GLEW with modern CMake and options
     # FetchContent_Declare(
@@ -74,17 +79,17 @@ find_package(wxWidgets QUIET)
 # endif()
 
 # STB - Header-only-Bibliothek
-message(STATUS "Fetching stb...")
+# message(STATUS "Fetching stb...")
 
-FetchContent_Declare(
-    stb
-    GIT_REPOSITORY https://github.com/nothings/stb.git
-    GIT_SHALLOW ON
-)
+# FetchContent_Declare(
+    # stb
+    # GIT_REPOSITORY https://github.com/nothings/stb.git
+    # GIT_SHALLOW ON
+# )
 
-FetchContent_MakeAvailable(stb)
+# FetchContent_MakeAvailable(stb)
 
-set(STB_INCLUDE_DIR ${stb_SOURCE_DIR})
+set(STB_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/submodules/stb")
 
 # GLAD
 # set(GLAD_SOURCE_DIR "${PROJECT_SOURCE_DIR}/thirdparty/glad/src")
@@ -122,8 +127,8 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR} ${STB_INCLUDE_D
 # wxWidgets Linking
 target_link_libraries(${PROJECT_NAME} PUBLIC wx::net wx::core wx::base)
 
-if (NOT GLEW_FOUND)
-    target_link_libraries(${PROJECT_NAME} PRIVATE libglew_static)
-else()
-    target_link_libraries(${PROJECT_NAME} PUBLIC GLEW::glew_s)
-endif()
+# if (NOT GLEW_FOUND)
+target_link_libraries(${PROJECT_NAME} PRIVATE libglew_static)
+# else()
+    # target_link_libraries(${PROJECT_NAME} PUBLIC GLEW::glew_s)
+# endif()
