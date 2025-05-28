@@ -11,8 +11,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # WxWidgets
 find_package(wxWidgets QUIET)
 
-if (NOT wxWidgets_FOUND)
-    message(STATUS "wxWidgets not found")
+# if (NOT wxWidgets_FOUND)
+    # message(STATUS "wxWidgets not found")
     set(wxBUILD_SHARED OFF)
     set(wxBUILD_TESTS OFF)
     set(wxBUILD_DEMOS OFF)
@@ -27,15 +27,15 @@ if (NOT wxWidgets_FOUND)
            -DwxUSE_STD=0
     )
     FetchContent_MakeAvailable(wxWidgets)
-else()
-    message(STATUS "wxWidgets Found")
-endif()
+# else()
+    # message(STATUS "wxWidgets Found")
+# endif()
 
 # GLEW
-find_package(GLEW QUIET)
+# find_package(GLEW QUIET)
 
-if (NOT GLEW_FOUND)
-    message(STATUS "GLEW not found")
+# if (NOT GLEW_FOUND)
+    # message(STATUS "GLEW not found")
     message(STATUS "Fetching GLEW...")
 
     set(glew-cmake_BUILD_SHARED OFF)
@@ -69,9 +69,9 @@ if (NOT GLEW_FOUND)
 
     # FetchContent_MakeAvailable(glew)
     # #add_subdirectory(${glew_SOURCE_DIR} ${glew_BINARY_DIR} EXCLUDE_FROM_ALL)
-else()
-    message(STATUS "GLEW Found")
-endif()
+# else()
+    # message(STATUS "GLEW Found")
+# endif()
 
 # STB - Header-only-Bibliothek
 message(STATUS "Fetching stb...")
