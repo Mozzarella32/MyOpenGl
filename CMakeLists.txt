@@ -18,16 +18,37 @@ set(wxBUILD_TESTS OFF)
 set(wxBUILD_DEMOS OFF)
 set(wxBUILD_EXAMPLES OFF)
 
+set(wxBUILD_STC OFF CACHE BOOL "" FORCE)
+set(wxUSE_STC OFF CACHE BOOL "" FORCE)
+
 message(STATUS "Fetching wxWidgets...")
 FetchContent_Declare(
-   wxWidgets
-   GIT_REPOSITORY https://github.com/wxWidgets/wxWidgets.git
+    wxWidgets
+    GIT_REPOSITORY https://github.com/wxWidgets/wxWidgets.git
 
-   GIT_SHALLOW ON
-   CMAKE_ARGS
-       -DwxUSE_STD=0
-   GIT_PROGRESS TRUE
-)
+    GIT_SHALLOW ON
+    CMAKE_ARGS
+       -DwxBUILD_SHARED=OFF
+       -DwxBUILD_TESTS=OFF
+       -DwxBUILD_DEMOS=OFF
+       -DwxBUILD_EXAMPLES=OFF
+
+       -DwxUSE_WEBVIEW=OFF
+       -DwxUSE_WEBREQUEST=OFF
+       -DwxUSE_MEDIACTRL=OFF
+       -DwxUSE_SOCKETS=OFF
+       -DwxUSE_PROTOCOL=OFF
+       -DwxUSE_URL=OFF
+       -DwxUSE_WEBVIEW_EDGE=OFF
+       -DwxUSE_GRAPHICS_CONTEXT=OFF
+       -DwxUSE_ODBC=OFF
+       -DwxUSE_ZIPSTREAM=OFF
+       -DwxUSE_TARSTREAM=OFF
+       -DwxUSE_FTP=OFF
+       -DwxUSE_HTTP=OFF
+       -DwxUSE_STL=OFF
+       -DwxBUILD_STC=OFF
+ )
 FetchContent_MakeAvailable(wxWidgets)
 # else()
     # message(STATUS "wxWidgets Found")
@@ -125,7 +146,7 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE  $<$<COMPILE_LANGUAGE:CXX>:${P
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR} ${STB_INCLUDE_DIR})
 
 # wxWidgets Linking
-target_link_libraries(${PROJECT_NAME} PUBLIC wx::net wx::core wx::base)
+target_link_libraries(${PROJECT_NAME} PUBLIC wx::core wx::base)
 
 # if (NOT GLEW_FOUND)
 target_link_libraries(${PROJECT_NAME} PRIVATE libglew_static)
