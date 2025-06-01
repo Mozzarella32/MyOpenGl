@@ -9,47 +9,59 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # WxWidgets
-find_package(wxWidgets QUIET)
+# find_package(wxWidgets QUIET)
 
 # if (NOT wxWidgets_FOUND) message(STATUS "wxWidgets not found")
-set(wxBUILD_SHARED OFF)
-set(wxBUILD_TESTS OFF)
-set(wxBUILD_DEMOS OFF)
-set(wxBUILD_EXAMPLES OFF)
 
-set(wxBUILD_STC
-    OFF
-    CACHE BOOL "" FORCE)
-set(wxUSE_STC
-    OFF
-    CACHE BOOL "" FORCE)
+# Eigene Build-Optionen setzen
+set(wxBUILD_SHARED OFF CACHE BOOL "" FORCE)
+set(wxBUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(wxBUILD_DEMOS OFF CACHE BOOL "" FORCE)
+set(wxBUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+set(wxUSE_WEBVIEW OFF CACHE BOOL "" FORCE)
+set(wxUSE_WEBREQUEST OFF CACHE BOOL "" FORCE)
+set(wxUSE_MEDIACTRL OFF CACHE BOOL "" FORCE)
+set(wxUSE_SOCKETS OFF CACHE BOOL "" FORCE)
+set(wxUSE_PROTOCOL OFF CACHE BOOL "" FORCE)
+set(wxUSE_FS_INET OFF CACHE BOOL "" FORCE)
+set(wxUSE_URL OFF CACHE BOOL "" FORCE)
+set(wxUSE_WEBVIEW_EDGE OFF CACHE BOOL "" FORCE)
+set(wxUSE_ODBC OFF CACHE BOOL "" FORCE)
+set(wxUSE_ZIPSTREAM OFF CACHE BOOL "" FORCE)
+set(wxUSE_TARSTREAM OFF CACHE BOOL "" FORCE)
+set(wxUSE_FTP OFF CACHE BOOL "" FORCE)
+set(wxUSE_HTTP OFF CACHE BOOL "" FORCE)
+set(wxUSE_STL OFF CACHE BOOL "" FORCE)
+set(wxBUILD_STC OFF CACHE BOOL "" FORCE)
 
-message(STATUS "Fetching wxWidgets...")
-FetchContent_Declare(
-  wxWidgets
-  GIT_REPOSITORY https://github.com/wxWidgets/wxWidgets.git
-  GIT_SHALLOW ON
-  CMAKE_ARGS
-  -DwxBUILD_SHARED=OFF
-  -DwxBUILD_TESTS=OFF
-  -DwxBUILD_DEMOS=OFF
-  -DwxBUILD_EXAMPLES=OFF
-  -DwxUSE_WEBVIEW=OFF
-  -DwxUSE_WEBREQUEST=OFF
-  -DwxUSE_MEDIACTRL=OFF
-  -DwxUSE_SOCKETS=OFF
-  -DwxUSE_PROTOCOL=OFF
-  -DwxUSE_URL=OFF
-  -DwxUSE_WEBVIEW_EDGE=OFF
-  -DwxUSE_GRAPHICS_CONTEXT=OFF
-  -DwxUSE_ODBC=OFF
-  -DwxUSE_ZIPSTREAM=OFF
-  -DwxUSE_TARSTREAM=OFF
-  -DwxUSE_FTP=OFF
-  -DwxUSE_HTTP=OFF
-  -DwxUSE_STL=OFF
-  -DwxBUILD_STC=OFF)
-FetchContent_MakeAvailable(wxWidgets)
+add_subdirectory(${PROJECT_SOURCE_DIR}/submodules/wxWidgets)
+
+# message(STATUS "Fetching wxWidgets...")
+# FetchContent_Declare(
+#   wxWidgets
+#   GIT_REPOSITORY https://github.com/wxWidgets/wxWidgets.git
+#   GIT_SHALLOW ON
+#   CMAKE_ARGS
+#   -DwxBUILD_SHARED=OFF
+#   -DwxBUILD_TESTS=OFF
+#   -DwxBUILD_DEMOS=OFF
+#   -DwxBUILD_EXAMPLES=OFF
+#   -DwxUSE_WEBVIEW=OFF
+#   -DwxUSE_WEBREQUEST=OFF
+#   -DwxUSE_MEDIACTRL=OFF
+#   -DwxUSE_SOCKETS=OFF
+#   -DwxUSE_PROTOCOL=OFF
+#   -DwxUSE_URL=OFF
+#   -DwxUSE_WEBVIEW_EDGE=OFF
+#   -DwxUSE_GRAPHICS_CONTEXT=OFF
+#   -DwxUSE_ODBC=OFF
+#   -DwxUSE_ZIPSTREAM=OFF
+#   -DwxUSE_TARSTREAM=OFF
+#   -DwxUSE_FTP=OFF
+#   -DwxUSE_HTTP=OFF
+#   -DwxUSE_STL=OFF
+#   -DwxBUILD_STC=OFF)
+# FetchContent_MakeAvailable(wxWidgets)
 # else() message(STATUS "wxWidgets Found") endif()
 
 # GLEW find_package(GLEW QUIET)
