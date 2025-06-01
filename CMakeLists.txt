@@ -11,8 +11,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # WxWidgets
 find_package(wxWidgets QUIET)
 
-# if (NOT wxWidgets_FOUND)
-# message(STATUS "wxWidgets not found")
+# if (NOT wxWidgets_FOUND) message(STATUS "wxWidgets not found")
 set(wxBUILD_SHARED OFF)
 set(wxBUILD_TESTS OFF)
 set(wxBUILD_DEMOS OFF)
@@ -51,19 +50,19 @@ FetchContent_Declare(
   -DwxUSE_STL=OFF
   -DwxBUILD_STC=OFF)
 FetchContent_MakeAvailable(wxWidgets)
-# else()
-# message(STATUS "wxWidgets Found")
-# endif()
+# else() message(STATUS "wxWidgets Found") endif()
 
 # GLEW find_package(GLEW QUIET)
 
-# if (NOT GLEW_FOUND)
-# message(STATUS "GLEW not found") message(STATUS "Fetching GLEW...")
+# if (NOT GLEW_FOUND) message(STATUS "GLEW not found") message(STATUS "Fetching
+# GLEW...")
 
 set(glew-cmake_BUILD_SHARED OFF)
 set(USE_GLU ON)
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DGLEW_EGL")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGLEW_EGL")
+if(UNIX AND NOT APPLE) # Nur Linux, nicht macOS
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DGLEW_EGL")
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGLEW_EGL")
+endif()
 
 add_subdirectory(${PROJECT_SOURCE_DIR}/submodules/glew-cmake)
 
@@ -82,16 +81,13 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/submodules/glew-cmake)
 # CACHE BOOL "" FORCE)
 
 # FetchContent_MakeAvailable(glew) #add_subdirectory(${glew_SOURCE_DIR}
-# ${glew_BINARY_DIR} EXCLUDE_FROM_ALL)
-# else()
-# message(STATUS "GLEW Found")
+# ${glew_BINARY_DIR} EXCLUDE_FROM_ALL) else() message(STATUS "GLEW Found")
 # endif()
 
 # STB - Header-only-Bibliothek message(STATUS "Fetching stb...")
 
-# FetchContent_Declare(
-# stb GIT_REPOSITORY https://github.com/nothings/stb.git GIT_SHALLOW ON
-# )
+# FetchContent_Declare( stb GIT_REPOSITORY https://github.com/nothings/stb.git
+# GIT_SHALLOW ON )
 
 # FetchContent_MakeAvailable(stb)
 
@@ -135,6 +131,4 @@ target_link_libraries(${PROJECT_NAME} PUBLIC wx::core wx::base)
 
 # if (NOT GLEW_FOUND)
 target_link_libraries(${PROJECT_NAME} PRIVATE libglew_static)
-# else()
-# target_link_libraries(${PROJECT_NAME} PUBLIC GLEW::glew_s)
-# endif()
+# else() target_link_libraries(${PROJECT_NAME} PUBLIC GLEW::glew_s) endif()
