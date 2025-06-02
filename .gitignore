@@ -32,7 +32,10 @@
 *.app
 
 # CMake
-build/*
+build
 
 # clangd
 .cache
+
+# Submodules
+submodules
