@@ -69,14 +69,25 @@ add_subdirectory(${PROJECT_SOURCE_DIR}/submodules/wxWidgets)
 # if (NOT GLEW_FOUND) message(STATUS "GLEW not found") message(STATUS "Fetching
 # GLEW...")
 
-set(glew-cmake_BUILD_SHARED OFF)
-set(USE_GLU ON)
-if(UNIX AND NOT APPLE) # Nur Linux, nicht macOS
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DGLEW_EGL")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGLEW_EGL")
-endif()
+# set(glew-cmake_BUILD_SHARED OFF)
+# set(USE_GLU ON)
+# if(UNIX AND NOT APPLE) # Nur Linux, nicht macOS
+#   set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DGLEW_EGL")
+#   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGLEW_EGL")
+# endif()
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/submodules/glew-cmake)
+# add_subdirectory(${PROJECT_SOURCE_DIR}/submodules/glew-cmake)
+
+
+# find_package(PkgConfig REQUIRED)
+# pkg_check_modules(EGL REQUIRED egl)
+
+set(GLAD_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/thirdparty/glad/gl/include")
+set(GLAD_SOURCE "${PROJECT_SOURCE_DIR}/thirdparty/glad/gl/src/glad.c")
+
+
+find_package(OpenGL REQUIRED)
+include_directories(${OPENGL_INCLUDE_DIRS})
 
 # set(GLEW_X11 OFF CACHE BOOL "" FORCE) set(GLEW_EGL ON CACHE BOOL "" FORCE)
 # FetchContent_Declare( GLEW GIT_REPOSITORY
@@ -136,11 +147,16 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE
 
 # Include-Direktiven
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR}
-                                                  ${STB_INCLUDE_DIR})
+                                                  ${STB_INCLUDE_DIR}
+                                                  ${GLAD_INCLUDE_DIR})
 
 # wxWidgets Linking
 target_link_libraries(${PROJECT_NAME} PUBLIC wx::core wx::base)
 
+target_link_libraries(${PROJECT_NAME} PUBLIC
+    ${OPENGL_gl_LIBRARY}
+    ${OPENGL_glu_LIBRARY}
+)
 # if (NOT GLEW_FOUND)
-target_link_libraries(${PROJECT_NAME} PRIVATE libglew_static)
+# target_link_libraries(${PROJECT_NAME} PRIVATE libglew_static)
 # else() target_link_libraries(${PROJECT_NAME} PUBLIC GLEW::glew_s) endif()
