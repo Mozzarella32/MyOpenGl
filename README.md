@@ -4,7 +4,7 @@ This is a wrapper around opengl integrating a bit with wxwidges for texture <=> 
 
 ## Downloading and Building
 ```bash
-git clone --recurse-submodules --shallow-submodules git@github.com:Mozzarella32/MyOpenGl.git
+git clone --recurse-submodules --shallow-submodules https://github.com/Mozzarella32/MyOpenGl.git
 cd MyOpenGl
 mkdir build
 cd build
