@@ -1,6 +1,8 @@
 [submodule "submodules/stb"]
 	path = submodules/stb
 	url = https://github.com/nothings/stb.git
+	branch = master
 [submodule "submodules/wxWidgets"]
 	path = submodules/wxWidgets
 	url = https://github.com/wxWidgets/wxWidgets.git
+	branch = master
