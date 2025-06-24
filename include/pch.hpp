@@ -22,7 +22,12 @@
 #include <Windows.h>
 #include <GL/gl.h>
 #endif
+
+#ifdef __APPLE__
+#include <OpenGL/glu.h>
+#else
 #include <GL/glu.h>
+#endif
 
 // #ifdef GLEW_EGL
 	// static_assert(false && "EGL");
