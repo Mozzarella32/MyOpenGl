@@ -84,7 +84,7 @@ Shader::Shader(ErrorHandler err, const std::string& vertexShader, const std::str
 		int length = 0;
 		GLCALL(glGetProgramiv(shaderId, GL_INFO_LOG_LENGTH, &length));
 		char* message = new char[length];
-		GLCALL(glGetShaderInfoLog(shaderId, length, &length, message));
+		GLCALL(glGetProgramInfoLog(shaderId, length, &length, message));
 		err("Shader Link Error", "Error: " + std::string(message));
 		delete[] message;
 		GLCALL(glDeleteProgram(shaderId));
