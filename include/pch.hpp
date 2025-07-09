@@ -47,6 +47,8 @@
 #include <cassert>
 #include <algorithm>
 #include <array>
+#include <sstream>
+
 #include <wx/glcanvas.h>
 
 #include <wx/image.h>
