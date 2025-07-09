@@ -15,7 +15,8 @@
 #include <signal.h>
 #define TRAP() raise(SIGTRAP)
 #else
-#error "Platform not supported for TRAP()"
+#define TRAP()
+// #error "Platform not supported for TRAP()"
 #endif
 
 const Texture::Descriptor Texture::DefaultDescriptor = {};
