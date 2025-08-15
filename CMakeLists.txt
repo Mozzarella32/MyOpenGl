@@ -2,39 +2,15 @@ cmake_minimum_required(VERSION 3.13)
 
 project(MyOpenGl LANGUAGES C CXX)
 
-include(FetchContent)
-
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# WxWidgets
-set(wxBUILD_SHARED OFF CACHE BOOL "" FORCE)
-set(wxBUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(wxBUILD_DEMOS OFF CACHE BOOL "" FORCE)
-set(wxBUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(wxUSE_WEBVIEW OFF CACHE BOOL "" FORCE)
-set(wxUSE_WEBREQUEST OFF CACHE BOOL "" FORCE)
-set(wxUSE_MEDIACTRL OFF CACHE BOOL "" FORCE)
-set(wxUSE_SOCKETS OFF CACHE BOOL "" FORCE)
-set(wxUSE_PROTOCOL OFF CACHE BOOL "" FORCE)
-set(wxUSE_FS_INET OFF CACHE BOOL "" FORCE)
-set(wxUSE_URL OFF CACHE BOOL "" FORCE)
-set(wxUSE_WEBVIEW_EDGE OFF CACHE BOOL "" FORCE)
-set(wxUSE_ODBC OFF CACHE BOOL "" FORCE)
-set(wxUSE_ZIPSTREAM OFF CACHE BOOL "" FORCE)
-set(wxUSE_TARSTREAM OFF CACHE BOOL "" FORCE)
-set(wxUSE_FTP OFF CACHE BOOL "" FORCE)
-set(wxUSE_HTTP OFF CACHE BOOL "" FORCE)
-set(wxUSE_STL OFF CACHE BOOL "" FORCE)
-set(wxBUILD_STC OFF CACHE BOOL "" FORCE)
-
 add_subdirectory(${PROJECT_SOURCE_DIR}/submodules/wxWidgets)
 set(GLAD_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/thirdparty/glad/gl/include")
 set(GLAD_SOURCE "${PROJECT_SOURCE_DIR}/thirdparty/glad/gl/src/glad.c")
-
 
 find_package(OpenGL REQUIRED)
 include_directories(${OPENGL_INCLUDE_DIRS})
@@ -57,6 +33,14 @@ source_group("Header Files" FILES ${MY_HEADERS})
 
 list(REMOVE_ITEM MY_SOURCE ${PCH_HEADERS})
 list(REMOVE_ITEM MY_HEADERS ${PCH_HEADERS})
+
+if (MSVC)
+    add_compile_options(/W4)
+    set_source_files_properties(${GLAD_SOURCE} PROPERTIES COMPILE_FLAGS "/w")
+else()
+    add_compile_options(-Wall -Wextra -Wpedantic -Wno-missing-field-initializers -Wno-missing-designated-field-initializers)
+    set_source_files_properties(${GLAD_SOURCE} PROPERTIES COMPILE_FLAGS "-w")
+endif()
 
 # Statische Bibliothek erstellen
 add_library(${PROJECT_NAME} STATIC ${MY_SOURCE} ${GLAD_SOURCE})

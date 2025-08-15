@@ -70,7 +70,7 @@ Texture::Texture(const std::filesystem::path& Path, const Descriptor& desc)
 
 
 Texture::Texture(int Width, int Height, void* pixels, const Descriptor& desc)
-	: Width(Width), Height(Height), desc(desc) {
+	: desc(desc), Width(Width), Height(Height) {
 	GLCALL(glGenTextures(1, &TextureId));
 	InitializeTexture(pixels);
 }
@@ -154,10 +154,12 @@ void Texture::Resize(int Width, int Height, void* pixels) {
 }
 
 void Texture::bind(Shader* shader, const GLchar* TextureUniformName, const GLchar* TextureUniformSize, unsigned int Pos) {
+	using namespace std::string_literals;
+	
 	assert(Pos < 32);
-	if (TextureUniformName != "")
+	if (TextureUniformName != ""s)
 		GLCALL(glUniform1i(shader->GetLocation(TextureUniformName), Pos));
-	if (TextureUniformSize != "")
+	if (TextureUniformSize != ""s)
 		GLCALL(glUniform2f(shader->GetLocation(TextureUniformSize), Width, Height));
 	GLCALL(glActiveTexture(Pos + GL_TEXTURE0));
 	GLCALL(glBindTexture(GL_TEXTURE_2D, TextureId));

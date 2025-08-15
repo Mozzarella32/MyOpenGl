@@ -103,7 +103,7 @@ public:
 	GLenum Usage;
 	GLuint Instancingdivisor;
 
-	size_t NumVerts = 0;
+	GLsizei NumVerts = 0;
 
 	std::function<void(GLuint&, GLuint)> PrepareVBOVertexFunktion;
 
