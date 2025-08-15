@@ -16,7 +16,7 @@ extern void _GLContextCheck();
 #else
 
 #define GLCALL(call) call
-#define ERRORLOG 
-#define CONTEXTCHECK
+#define ERRORLOG(call) do {} while (0)
+#define CONTEXTCHECK(call) do {} while (0)
 
 #endif
