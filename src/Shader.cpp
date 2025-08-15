@@ -67,8 +67,7 @@ Shader::Shader(ErrorHandler err, const std::string &vertexShader,
                const std::string &geometryShader) {
   shaderId = GLCALL(glCreateProgram());
   GLenum error = glGetError();
-  if (shaderId == 0 /*|| error != GL_NO_ERROR*/) {
-    // Fehler beim Erstellen des Shaderprogramms
+  if (shaderId == 0) {
     if (shaderId == 0) {
       err("Shader Creation Error", "Failed to create shader program.");
     } else {
@@ -118,62 +117,6 @@ Shader::Shader(ErrorHandler err, const std::string &vertexShader,
   if (!geometryShader.empty()) {
     GLCALL(glDeleteShader(gs));
   }
-
-  //	//std::stringstream out;
-
-  ////GLuint shaderId =
-  ///ShaderManager::GetShader(ShaderManager::Building)->GetId();
-  // GLint numAttributes;
-
-  //// Anzahl der aktiven Attribute abfragen
-  // glGetProgramiv(shaderId, GL_ACTIVE_ATTRIBUTES, &numAttributes);
-
-  ////out << "Shader Program ID: " << shaderId << std::endl;
-  ////out << "Anzahl der aktiven Attribute: " << numAttributes << std::endl;
-
-  //// Für jedes Attribut Informationen abfragen
-  // for (GLint i = 0; i < numAttributes; ++i) {
-  //	char name[256];  // Name des Attributs
-  //	GLsizei length;
-  //	GLint size;
-  //	GLenum type;
-
-  //	// Informationen über das Attribut abrufen
-  //	glGetActiveAttrib(shaderId, i, sizeof(name), &length, &size, &type,
-  //name);
-
-  //	// Layout-Position des Attributs abfragen
-  //	GLint location = glGetAttribLocation(shaderId, name);
-
-  //	// Typ des Attributs in einen menschenlesbaren String umwandeln
-  //	std::string typeName;
-  //	switch (type) {
-  //	case GL_FLOAT: typeName = "float"; break;
-  //	case GL_FLOAT_VEC2: typeName = "vec2"; break;
-  //	case GL_FLOAT_VEC3: typeName = "vec3"; break;
-  //	case GL_FLOAT_VEC4: typeName = "vec4"; break;
-  //	case GL_INT: typeName = "int"; break;
-  //	case GL_INT_VEC2: typeName = "ivec2"; break;
-  //	case GL_INT_VEC3: typeName = "ivec3"; break;
-  //	case GL_INT_VEC4: typeName = "ivec4"; break;
-  //	case GL_UNSIGNED_INT: typeName = "unsigned int"; break;
-  //	case GL_UNSIGNED_INT_VEC2: typeName = "uvec2"; break;
-  //	case GL_UNSIGNED_INT_VEC3: typeName = "uvec3"; break;
-  //	case GL_UNSIGNED_INT_VEC4: typeName = "uvec4"; break;
-  //	case GL_FLOAT_MAT2: typeName = "mat2"; break;
-  //	case GL_FLOAT_MAT3: typeName = "mat3"; break;
-  //	case GL_FLOAT_MAT4: typeName = "mat4"; break;
-  //	default: typeName = "unknown"; break;
-  //	}
-
-  //	// Informationen über das Attribut ausgeben
-  //	//out << "Attribut #" << i << ": " << name << std::endl;
-  //	//out << "    Typ: " << typeName << std::endl;
-  //	//out << "    Größe: " << size << std::endl;
-  //	//out << "    Layout-Position: " << location << std::endl;
-  //}
-  //
-  ////std::string o = out.str();
 }
 
 Shader::~Shader() { GLCALL(glDeleteProgram(shaderId)); }
@@ -194,27 +137,9 @@ GLint Shader::GetLocation(const std::string &name) {
     auto Location = GLCALL(glGetUniformLocation(shaderId, name.c_str()));
     if (Location == -1) {
       ERRORLOG("getUniformLocation returned -1");
-      // #ifdef  _DEBUG
-      // Beep(200, 200);
-      // #endif
     }
     Locations[name] = Location;
     return Locations[name];
   } else
     return it->second;
-} /*
-
- ShaderBinder::ShaderBinder(wxGLContext* Context, Shader& shader, wxGLCanvas*
- Canvas) :shader(shader) { Canvas->SetCurrent(*Context); shader.bind();
- }
-
- void ShaderBinder::unbind() {
-         if (!Unbound) {
-                 shader.unbind();
-                 Unbound = true;
-         }
- }
-
- ShaderBinder::~ShaderBinder() {
-         unbind();
- }*/
+}
