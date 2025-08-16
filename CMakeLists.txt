@@ -35,11 +35,9 @@ list(REMOVE_ITEM MY_SOURCE ${PCH_HEADERS})
 list(REMOVE_ITEM MY_HEADERS ${PCH_HEADERS})
 
 if (MSVC)
-    add_compile_options(/W4 /WX)
-    set_source_files_properties(${GLAD_SOURCE} PROPERTIES COMPILE_FLAGS "/w")
+    set_source_files_properties(${SRC_DIR} /W4 /WX)
 else()
-    add_compile_options(-Werror -Wall -Wextra -Wpedantic -Wno-missing-field-initializers)
-    set_source_files_properties(${GLAD_SOURCE} PROPERTIES COMPILE_FLAGS "-w")
+    set_source_files_properties(${SRC_DIR} -Werror -Wall -Wextra -Wpedantic -Wno-missing-field-initializers)
 endif()
 
 # Statische Bibliothek erstellen
