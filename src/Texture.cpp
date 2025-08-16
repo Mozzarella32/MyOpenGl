@@ -142,13 +142,13 @@ wxImage Texture::ToWxImage() const {
 }
 
 
-void Texture::Resize(int Width, int Height, void* pixels) {
-	if (this->Width == Width && this->Height && pixels == nullptr)return;
-	this->Width = Width;
-	this->Height = Height;
+void Texture::Resize(int newWidth, int newHeight, void* pixels) {
+	if (Width == newWidth && Height == newHeight && pixels == nullptr)return;
+	Width = newWidth;
+	Height = newHeight;
 	GLCALL(glBindTexture(GL_TEXTURE_2D, TextureId));
 
-	GLCALL(glTexImage2D(GL_TEXTURE_2D, 0, desc.Internal_Format, Width, Height, 0, desc.Format, desc.Type, pixels));
+	GLCALL(glTexImage2D(GL_TEXTURE_2D, 0, desc.Internal_Format, newWidth, newHeight, 0, desc.Format, desc.Type, pixels));
 
 	GLCALL(glBindTexture(GL_TEXTURE_2D, 0));
 }

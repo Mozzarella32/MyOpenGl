@@ -58,7 +58,7 @@ public:
 		GLenum Depth_Stencil_Texture_Mode = GL_DEPTH_COMPONENT;
 	};
 
-	GLuint TextureId = -1;
+	GLuint TextureId = GLuint(-1);
 
 	const Descriptor desc;
 
