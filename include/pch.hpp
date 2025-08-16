@@ -1,9 +1,5 @@
 #pragma once
 
-// #include <glad/gl.h>
-
-// #define GLEW_STATIC
-// #include <GL/glew.h>
 #include <glad/glad.h>
 
 #ifdef _WIN32
@@ -21,6 +17,8 @@
 #endif
 
 #define _CRT_SECURE_NO_WARNINGS
+
+#include <windsock2.h>
 #include <Windows.h>
 #include <GL/gl.h>
 #endif
@@ -30,12 +28,6 @@
 #else
 #include <GL/glu.h>
 #endif
-
-// #ifdef GLEW_EGL
-	// static_assert(false && "EGL");
-// #else
-	// static_assert(false && "Not EGL");
-// #endif
 
 #include <cstddef> 
 #include <vector>
