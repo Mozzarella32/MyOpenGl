@@ -18,7 +18,7 @@
 
 #define _CRT_SECURE_NO_WARNINGS
 
-#include <windsock2.h>
+#include <winsock2.h>
 #include <Windows.h>
 #include <GL/gl.h>
 #endif
