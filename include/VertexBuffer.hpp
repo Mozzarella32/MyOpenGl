@@ -109,7 +109,7 @@ public:
 
 	void PrepareVBO(GLuint& Position);
 
-	GLuint VBO;
+	GLuint VBO = GLuint(-1);
 	template<class VertexType>
 	//The VertexType is just a dummy object wich is unused, becaus Constructors can't have explicit template parameters
 	VertexBufferObjectDescriptor(GLenum Usage, VertexType, GLuint Instancingdivisor = 0)
