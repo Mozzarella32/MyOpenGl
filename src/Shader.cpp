@@ -1,6 +1,8 @@
 #include "Shader.hpp"
 
 #include "Utilities.hpp"
+#include <functional>
+#include <variant>
 
 GLuint Shader::compile(const std::string &shaderSource, GLenum type,
                        ErrorHandler err) {
@@ -105,6 +107,19 @@ Shader::Shader(ErrorHandler err, const std::string &vertexShader,
     GLCALL(glDeleteProgram(shaderId));
     return;
   }
+
+  GLint numUniforms = 0;
+  glGetProgramiv(shaderId, GL_ACTIVE_UNIFORMS, &numUniforms);
+
+  for(int i = 0; i < numUniforms; ++i) {
+      char name[128];
+      GLsizei length;
+      GLint size;
+      GLenum type;
+      glGetActiveUniform(shaderId, i, sizeof(name), &length, &size, &type, name);
+      uniformInfo[name] = {glGetUniformLocation(shaderId, name), 0};
+  }
+
 #ifndef NDEBUG
   GLCALL(glDetachShader(shaderId, vs));
   GLCALL(glDetachShader(shaderId, fs));
@@ -131,15 +146,41 @@ void Shader::unbind() {
 
 const GLuint &Shader::GetId() const { return shaderId; }
 
-GLint Shader::GetLocation(const std::string &name) {
-  auto it = Locations.find(name);
-  if (it == end(Locations)) {
-    auto Location = GLCALL(glGetUniformLocation(shaderId, name.c_str()));
-    if (Location == -1) {
-      ERRORLOG("getUniformLocation returned -1");
+template<typename T>
+concept hashable = requires (const T t) {
+  { t.hash() } -> std::same_as<size_t>;
+};
+
+template<typename T>
+concept applyable = requires (const T tconst, GLint location) {
+  { tconst.apply(location) } -> std::same_as<void>;
+};
+
+void Shader::applyUniform(const std::string& name, const UniformData& data){
+	auto it = uniformInfo.find(name);
+	if (it == uniformInfo.end()) {
+		ERRORLOG("Uniform not active or not existent");
+		return;
+	}
+	auto& info = it->second;
+
+  Visitor hasher{
+    [](const hashable auto & h) {
+      return h.hash();
     }
-    Locations[name] = Location;
-    return Locations[name];
-  } else
-    return it->second;
+  };
+
+  const auto newHash = std::visit(hasher, data);
+
+  if(info.lastHash == newHash) return;
+
+  info.lastHash = newHash;
+
+	Visitor applyer{
+	  [location = info.location](const applyable auto& a) {
+	    return a.apply(location);
+	  }
+	};
+
+	std::visit(applyer, data);
 }

@@ -46,3 +46,5 @@
 #include <wx/glcanvas.h>
 
 #include <wx/image.h>
+
+#include "../submodules/Visitor/Visitor.hpp"
