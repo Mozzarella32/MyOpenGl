@@ -2,10 +2,6 @@
 	path = submodules/stb
 	url = https://github.com/nothings/stb.git
 	branch = master
-[submodule "submodules/wxWidgets"]
-	path = submodules/wxWidgets
-	url = https://github.com/wxWidgets/wxWidgets.git
-	branch = master
 [submodule "submodules/Visitor"]
 	path = submodules/Visitor
 	url = https://github.com/Mozzarella32/Visitor.git

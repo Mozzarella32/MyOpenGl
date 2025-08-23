@@ -43,8 +43,8 @@
 #include <array>
 #include <sstream>
 
-#include <wx/glcanvas.h>
+// #include <wx/glcanvas.h>
 
-#include <wx/image.h>
+// #include <wx/image.h>
 
 #include "../submodules/Visitor/Visitor.hpp"

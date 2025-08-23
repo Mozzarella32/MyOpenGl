@@ -55,8 +55,6 @@ private:
 
 public:
 
-	GLint GetLocation(const std::string& name);
-
     struct Uniform1fData {
       GLfloat v0;
 			size_t hash() const {

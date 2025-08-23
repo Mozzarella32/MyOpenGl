@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_subdirectory(${PROJECT_SOURCE_DIR}/submodules/wxWidgets)
+# add_subdirectory(${PROJECT_SOURCE_DIR}/submodules/wxWidgets)
 set(GLAD_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/thirdparty/glad/gl/include")
 set(GLAD_SOURCE "${PROJECT_SOURCE_DIR}/thirdparty/glad/gl/src/glad.c")
 
@@ -53,7 +53,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR}
                                                   ${GLAD_INCLUDE_DIR})
 
 # wxWidgets Linking
-target_link_libraries(${PROJECT_NAME} PUBLIC wx::core wx::base)
+# target_link_libraries(${PROJECT_NAME} PUBLIC wx::core wx::base)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
     ${OPENGL_gl_LIBRARY}

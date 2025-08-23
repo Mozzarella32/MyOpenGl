@@ -75,71 +75,71 @@ Texture::Texture(int Width, int Height, void* pixels, const Descriptor& desc)
 	InitializeTexture(pixels);
 }
 
-Texture::Texture(const wxImage& Image, const Descriptor& desc)
-	:Texture(Image.GetWidth(), Image.GetHeight(),
-		[&Image]() -> std::vector<unsigned char> {
-			size_t Size = Image.GetWidth() * Image.GetHeight();
-			if (!Image.HasAlpha()) {
-				return std::vector<unsigned char>(Image.GetData(), Image.GetData() + 3 * Size);
-			}
+// Texture::Texture(const wxImage& Image, const Descriptor& desc)
+// 	:Texture(Image.GetWidth(), Image.GetHeight(),
+// 		[&Image]() -> std::vector<unsigned char> {
+// 			size_t Size = Image.GetWidth() * Image.GetHeight();
+// 			if (!Image.HasAlpha()) {
+// 				return std::vector<unsigned char>(Image.GetData(), Image.GetData() + 3 * Size);
+// 			}
 
-			auto Data = Image.GetData();
-			auto Alpha = Image.GetAlpha();
-			std::vector<unsigned char> Bytes(Size * 4, 0);
-			for (size_t i = 0; i < Size; i++) {
-				Bytes[4 * i + 0] = Data[3 * i + 0];
-				Bytes[4 * i + 1] = Data[3 * i + 1];
-				Bytes[4 * i + 2] = Data[3 * i + 2];
-				Bytes[4 * i + 3] = Alpha[i];
-			}
-			return Bytes;
-		}().data(),
-			[&Image, desc = desc]() mutable {
-			desc.Internal_Format = Image.HasAlpha() ? GL_RGBA : GL_RGB;
-			return desc;
-			}()) {}
+// 			auto Data = Image.GetData();
+// 			auto Alpha = Image.GetAlpha();
+// 			std::vector<unsigned char> Bytes(Size * 4, 0);
+// 			for (size_t i = 0; i < Size; i++) {
+// 				Bytes[4 * i + 0] = Data[3 * i + 0];
+// 				Bytes[4 * i + 1] = Data[3 * i + 1];
+// 				Bytes[4 * i + 2] = Data[3 * i + 2];
+// 				Bytes[4 * i + 3] = Alpha[i];
+// 			}
+// 			return Bytes;
+// 		}().data(),
+// 			[&Image, desc = desc]() mutable {
+// 			desc.Internal_Format = Image.HasAlpha() ? GL_RGBA : GL_RGB;
+// 			return desc;
+// 			}()) {}
 
 Texture::~Texture() {
 	GLCALL(glDeleteTextures(1, &TextureId));
 }
 
-wxImage Texture::ToWxImage() const {
-	// Bind the texture
-	GLCALL(glBindTexture(GL_TEXTURE_2D, TextureId));
+// wxImage Texture::ToWxImage() const {
+// 	// Bind the texture
+// 	GLCALL(glBindTexture(GL_TEXTURE_2D, TextureId));
 
-	// Determine if the texture has an alpha channel
-	bool hasAlpha = (desc.Internal_Format == GL_RGBA);
+// 	// Determine if the texture has an alpha channel
+// 	bool hasAlpha = (desc.Internal_Format == GL_RGBA);
 
-	// Create a buffer to hold the texture data
-	size_t pixelSize = hasAlpha ? 4 : 3;
-	std::vector<unsigned char> pixels(Width * Height * pixelSize);
+// 	// Create a buffer to hold the texture data
+// 	size_t pixelSize = hasAlpha ? 4 : 3;
+// 	std::vector<unsigned char> pixels(Width * Height * pixelSize);
 
-	// Get the texture data
-	GLCALL(glGetTexImage(GL_TEXTURE_2D, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, pixels.data()));
+// 	// Get the texture data
+// 	GLCALL(glGetTexImage(GL_TEXTURE_2D, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, pixels.data()));
 
-	// Unbind the texture
-	GLCALL(glBindTexture(GL_TEXTURE_2D, 0));
+// 	// Unbind the texture
+// 	GLCALL(glBindTexture(GL_TEXTURE_2D, 0));
 
-	if (!hasAlpha) {
-		// Allocate memory with malloc for wxImage to take ownership
-		unsigned char* data = static_cast<unsigned char*>(malloc(Width * Height * 3));
-		std::memcpy(data, pixels.data(), Width * Height * 3);
-		return wxImage(Width, Height, data, false);
-	}
-	else {
-		// Allocate memory with malloc for wxImage to take ownership
-		unsigned char* imageData = static_cast<unsigned char*>(malloc(Width * Height * 3));
-		unsigned char* alphaData = static_cast<unsigned char*>(malloc(Width * Height));
+// 	if (!hasAlpha) {
+// 		// Allocate memory with malloc for wxImage to take ownership
+// 		unsigned char* data = static_cast<unsigned char*>(malloc(Width * Height * 3));
+// 		std::memcpy(data, pixels.data(), Width * Height * 3);
+// 		return wxImage(Width, Height, data, false);
+// 	}
+// 	else {
+// 		// Allocate memory with malloc for wxImage to take ownership
+// 		unsigned char* imageData = static_cast<unsigned char*>(malloc(Width * Height * 3));
+// 		unsigned char* alphaData = static_cast<unsigned char*>(malloc(Width * Height));
 
-		for (int i = 0; i < Width * Height; ++i) {
-			imageData[i * 3 + 0] = pixels[i * pixelSize + 0];
-			imageData[i * 3 + 1] = pixels[i * pixelSize + 1];
-			imageData[i * 3 + 2] = pixels[i * pixelSize + 2];
-			alphaData[i] = pixels[i * pixelSize + 3];
-		}
-		return wxImage(Width, Height, imageData, alphaData, false);
-	}
-}
+// 		for (int i = 0; i < Width * Height; ++i) {
+// 			imageData[i * 3 + 0] = pixels[i * pixelSize + 0];
+// 			imageData[i * 3 + 1] = pixels[i * pixelSize + 1];
+// 			imageData[i * 3 + 2] = pixels[i * pixelSize + 2];
+// 			alphaData[i] = pixels[i * pixelSize + 3];
+// 		}
+// 		return wxImage(Width, Height, imageData, alphaData, false);
+// 	}
+// }
 
 
 void Texture::Resize(int newWidth, int newHeight, void* pixels) {
@@ -158,9 +158,10 @@ void Texture::bind(Shader* shader, const GLchar* TextureUniformName, const GLcha
 	
 	assert(Pos < 32);
 	if (TextureUniformName != ""s)
-		GLCALL(glUniform1i(shader->GetLocation(TextureUniformName), Pos));
+		shader->applyUniform(TextureUniformName, Shader::Uniform1uiData{Pos});
 	if (TextureUniformSize != ""s)
-		GLCALL(glUniform2f(shader->GetLocation(TextureUniformSize), Width, Height));
+		shader->applyUniform(TextureUniformSize, Shader::Uniform2fData{float(Width), float(Height)});
+
 	GLCALL(glActiveTexture(Pos + GL_TEXTURE0));
 	GLCALL(glBindTexture(GL_TEXTURE_2D, TextureId));
 }
@@ -184,9 +185,9 @@ int Texture::GetHeight() const {
 	return Height;
 }
 
-wxSize Texture::GetSize() const {
-	return { Width,Height };
-}
+// wxSize Texture::GetSize() const {
+// 	return { Width,Height };
+// }
 
 GLuint Texture::GetId() const {
 	return TextureId;
