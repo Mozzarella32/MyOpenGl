@@ -47,72 +47,21 @@ jobs:
     - uses: actions/checkout@v4
       with:
         submodules: recursive
-        fetch-depth: 0
-
-    - name: Set up sccache
-      if: matrix.os != 'archlinux'
-      uses: mozilla-actions/sccache-action@v0.0.9
-
+        fetch-depth: 1
+        
     - name: Set reusable strings
       id: strings
       shell: bash
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-        echo "arch-cache-dir=/home/runner/build-cache/${{ github.repository }}/${{ matrix.c_compiler }}-${{ matrix.build_type }}" >> "$GITHUB_OUTPUT"
 
-    - name: Install GTK3(Ubuntu)
-      if: matrix.os == 'ubuntu-latest'
-      run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libglu1-mesa-dev build-essential
-
-    - name: Arch restore Build
-      if: matrix.os == 'archlinux'
-      shell: bash
-      run: |
-        mkdir -p ${{ steps.strings.outputs.build-output-dir }}
-        cp --preserve=timestamps -r ${{ steps.strings.outputs.arch-cache-dir }}/* ${{ steps.strings.outputs.build-output-dir }} || true
-        rm -rf ${{ steps.strings.outputs.build-output-dir }}/CMakeFiles/Digitaler.dir/cmake_pch.hxx.pch
-      #Ugly clang workaround ^
-
-    - name: Configure CMake with sccache
-      if: matrix.os != 'archlinux'
-      env:
-        SCCACHE_GHA_ENABLED: "true"
-      run: >
-        cmake -B ${{ steps.strings.outputs.build-output-dir }}
-        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
-        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
-        -DCMAKE_CXX_COMPILER_LAUNCHER="sccache"
-        -DCMAKE_C_COMPILER_LAUNCHER="sccache"
-        -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-        -S ${{ github.workspace }}
-
-    - name: Configure CMake without sccache
-      if: matrix.os == 'archlinux'
+    - name: Configure CMake
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -S ${{ github.workspace }}
-         
-    - name: Build with sccache
-      if: matrix.os != 'archlinux'
-      env:
-        SCCACHE_GHA_ENABLED: "true"
+
+    - name: Build
       run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
-
-    - name: Build without sccache
-      if: matrix.os == 'archlinux'
-      run: cmake --build ${{ steps.strings.outputs.build-output-dir }} --config ${{ matrix.build_type }}
-
-    - name: Arch save Build
-      if: matrix.os == 'archlinux'
-      shell: bash
-      run: |
-        rm -rf ${{ steps.strings.outputs.arch-cache-dir }}
-        mkdir -p ${{ steps.strings.outputs.arch-cache-dir }}
-        cp --preserve=timestamps -r ${{ steps.strings.outputs.build-output-dir }}/* ${{ steps.strings.outputs.arch-cache-dir }} 
-
-    # - name: Test
-    #   working-directory: ${{ steps.strings.outputs.build-output-dir }}
-    #   run: ctest --build-config ${{ matrix.build_type }}
