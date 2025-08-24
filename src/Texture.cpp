@@ -68,79 +68,15 @@ Texture::Texture(const std::filesystem::path& Path, const Descriptor& desc)
 	stbi_image_free(textureBuffer);
 }
 
-
 Texture::Texture(int Width, int Height, void* pixels, const Descriptor& desc)
 	: desc(desc), Width(Width), Height(Height) {
 	GLCALL(glGenTextures(1, &TextureId));
 	InitializeTexture(pixels);
 }
 
-// Texture::Texture(const wxImage& Image, const Descriptor& desc)
-// 	:Texture(Image.GetWidth(), Image.GetHeight(),
-// 		[&Image]() -> std::vector<unsigned char> {
-// 			size_t Size = Image.GetWidth() * Image.GetHeight();
-// 			if (!Image.HasAlpha()) {
-// 				return std::vector<unsigned char>(Image.GetData(), Image.GetData() + 3 * Size);
-// 			}
-
-// 			auto Data = Image.GetData();
-// 			auto Alpha = Image.GetAlpha();
-// 			std::vector<unsigned char> Bytes(Size * 4, 0);
-// 			for (size_t i = 0; i < Size; i++) {
-// 				Bytes[4 * i + 0] = Data[3 * i + 0];
-// 				Bytes[4 * i + 1] = Data[3 * i + 1];
-// 				Bytes[4 * i + 2] = Data[3 * i + 2];
-// 				Bytes[4 * i + 3] = Alpha[i];
-// 			}
-// 			return Bytes;
-// 		}().data(),
-// 			[&Image, desc = desc]() mutable {
-// 			desc.Internal_Format = Image.HasAlpha() ? GL_RGBA : GL_RGB;
-// 			return desc;
-// 			}()) {}
-
 Texture::~Texture() {
 	GLCALL(glDeleteTextures(1, &TextureId));
 }
-
-// wxImage Texture::ToWxImage() const {
-// 	// Bind the texture
-// 	GLCALL(glBindTexture(GL_TEXTURE_2D, TextureId));
-
-// 	// Determine if the texture has an alpha channel
-// 	bool hasAlpha = (desc.Internal_Format == GL_RGBA);
-
-// 	// Create a buffer to hold the texture data
-// 	size_t pixelSize = hasAlpha ? 4 : 3;
-// 	std::vector<unsigned char> pixels(Width * Height * pixelSize);
-
-// 	// Get the texture data
-// 	GLCALL(glGetTexImage(GL_TEXTURE_2D, 0, hasAlpha ? GL_RGBA : GL_RGB, GL_UNSIGNED_BYTE, pixels.data()));
-
-// 	// Unbind the texture
-// 	GLCALL(glBindTexture(GL_TEXTURE_2D, 0));
-
-// 	if (!hasAlpha) {
-// 		// Allocate memory with malloc for wxImage to take ownership
-// 		unsigned char* data = static_cast<unsigned char*>(malloc(Width * Height * 3));
-// 		std::memcpy(data, pixels.data(), Width * Height * 3);
-// 		return wxImage(Width, Height, data, false);
-// 	}
-// 	else {
-// 		// Allocate memory with malloc for wxImage to take ownership
-// 		unsigned char* imageData = static_cast<unsigned char*>(malloc(Width * Height * 3));
-// 		unsigned char* alphaData = static_cast<unsigned char*>(malloc(Width * Height));
-
-// 		for (int i = 0; i < Width * Height; ++i) {
-// 			imageData[i * 3 + 0] = pixels[i * pixelSize + 0];
-// 			imageData[i * 3 + 1] = pixels[i * pixelSize + 1];
-// 			imageData[i * 3 + 2] = pixels[i * pixelSize + 2];
-// 			alphaData[i] = pixels[i * pixelSize + 3];
-// 		}
-// 		return wxImage(Width, Height, imageData, alphaData, false);
-// 	}
-// }
-
 
 void Texture::Resize(int newWidth, int newHeight, void* pixels) {
 	if (Width == newWidth && Height == newHeight && pixels == nullptr)return;
@@ -153,24 +89,24 @@ void Texture::Resize(int newWidth, int newHeight, void* pixels) {
 	GLCALL(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-void Texture::bind(Shader* shader, const GLchar* TextureUniformName, const GLchar* TextureUniformSize, unsigned int Pos) {
+void Texture::bind(Shader& shader, const std::string& TextureUniformName, const std::string& TextureUniformSize, unsigned int Pos) const {
 	using namespace std::string_literals;
 	
 	assert(Pos < 32);
 	if (TextureUniformName != ""s)
-		shader->apply(TextureUniformName, Shader::Data1ui{Pos});
+		shader.apply(TextureUniformName, Shader::Data1ui{Pos});
 	if (TextureUniformSize != ""s)
-		shader->apply(TextureUniformSize, Shader::Data2f{float(Width), float(Height)});
+		shader.apply(TextureUniformSize, Shader::Data2f{float(Width), float(Height)});
 
 	GLCALL(glActiveTexture(Pos + GL_TEXTURE0));
 	GLCALL(glBindTexture(GL_TEXTURE_2D, TextureId));
 }
 
-void Texture::bind() {
+void Texture::bind() const {
 	GLCALL(glBindTexture(GL_TEXTURE_2D, TextureId));
 }
 
-void Texture::unbind() {
+void Texture::unbind() const {
 #ifndef NDEBUG
 	GLCALL(glActiveTexture(GL_TEXTURE0));
 	GLCALL(glBindTexture(GL_TEXTURE_2D, 0));
@@ -184,10 +120,6 @@ int Texture::GetWidth() const {
 int Texture::GetHeight() const {
 	return Height;
 }
-
-// wxSize Texture::GetSize() const {
-// 	return { Width,Height };
-// }
 
 GLuint Texture::GetId() const {
 	return TextureId;
@@ -219,29 +151,23 @@ FrameBufferObject::FrameBufferObject(const std::vector<Texture*>& textures, cons
 		std::ofstream o("Error.log", std::ios::app);
 		switch (status) {
 		case GL_FRAMEBUFFER_COMPLETE:
-			// Framebuffer is complete, nothing to do here
 			break;
 		case GL_FRAMEBUFFER_UNDEFINED:
-			// The default framebuffer does not exist
 			o << "Framebuffer error: Default framebuffer does not exist" << std::endl;
 			o.close();
 			TRAP();
 			break;
 		case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
-			// One or more framebuffer attachments are incomplete or not attached
 			o << "Framebuffer error: Incomplete attachment" << std::endl;
 			o.close();
 			TRAP();
 			break;
 		case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
-			// No images are attached to the framebuffer
 			o << "Framebuffer error: No attachments" << std::endl;
 			o.close();
 			TRAP();
 			break;
-			// Add more cases for other possible error codes as needed
 		default:
-			// Unknown error
 			o << "Framebuffer error: Unknown error" << std::endl;
 			o.close();
 			TRAP();

@@ -72,7 +72,6 @@ public:
 
 	Texture(const std::filesystem::path& Path, const Descriptor& desc = DefaultDescriptor);
 	Texture(int Width, int Height, void* pixels = nullptr, const Descriptor& desc = DefaultDescriptor);
-	// Texture(const wxImage& Image, const Descriptor& desc = DefaultDescriptor);
 
 	Texture(const Texture&) = delete;
 	Texture(Texture&&) = delete;
@@ -80,8 +79,6 @@ public:
 	Texture& operator=(Texture&&) = delete;
 
 	~Texture();
-
-	// wxImage ToWxImage() const;
 
 	void Resize(int Width, int Height, void* pixels = nullptr);
 
@@ -97,7 +94,6 @@ private:
 public:
 	int GetWidth() const;
 	int GetHeight() const;
-	// wxSize GetSize() const;
 
 	GLuint GetId() const;
 public:
@@ -137,9 +133,6 @@ public:
 	void unbind();
 
 	GLuint GetId() const;
-
-	//Has been Removed
-	//Texture* GetTexture() const;
 
 	std::vector<Texture*> GetTextures() const;
 
