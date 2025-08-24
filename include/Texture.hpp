@@ -63,10 +63,11 @@ public:
 	const Descriptor desc;
 
 private:
-
 	void InitializeTexture(void* textureBuffer);
 
+public:
 	static const Descriptor DefaultDescriptor;
+
 public:
 
 	Texture(const std::filesystem::path& Path, const Descriptor& desc = DefaultDescriptor);
