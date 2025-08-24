@@ -158,9 +158,9 @@ void Texture::bind(Shader* shader, const GLchar* TextureUniformName, const GLcha
 	
 	assert(Pos < 32);
 	if (TextureUniformName != ""s)
-		shader->applyUniform(TextureUniformName, Shader::Uniform1uiData{Pos});
+		shader->apply(TextureUniformName, Shader::Data1ui{Pos});
 	if (TextureUniformSize != ""s)
-		shader->applyUniform(TextureUniformSize, Shader::Uniform2fData{float(Width), float(Height)});
+		shader->apply(TextureUniformSize, Shader::Data2f{float(Width), float(Height)});
 
 	GLCALL(glActiveTexture(Pos + GL_TEXTURE0));
 	GLCALL(glBindTexture(GL_TEXTURE_2D, TextureId));

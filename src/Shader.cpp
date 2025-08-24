@@ -158,7 +158,7 @@ concept applyable = requires (const T tconst, GLint location) {
   { tconst.apply(location) } -> std::same_as<void>;
 };
 
-void Shader::applyUniform(const std::string& name, const UniformData& data){
+void Shader::apply(const std::string& name, const UniformData& data){
 	auto it = uniformInfo.find(name);
 	if (it == uniformInfo.end()) {
 		ERRORLOG("Uniform not active or not existent");

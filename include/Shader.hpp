@@ -216,5 +216,5 @@ public:
         // DataMatrix2x3fv, DataMatrix3x2fv, DataMatrix2x4fv,
         // DataMatrix4x2fv, DataMatrix3x4fv, DataMatrix4x3fv>;
 
-		void applyUniform(const std::string& name, const UniformData& data);
+		void apply(const std::string& name, const UniformData& data);
 };
