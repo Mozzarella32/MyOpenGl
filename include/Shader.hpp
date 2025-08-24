@@ -44,211 +44,177 @@ public:
 
 	const GLuint& GetId() const;
 
-	struct Uniform1fData {
+	struct Data1f {
 	    GLfloat v0;
-	    size_t hash() const;
 	    void apply(GLint location) const;
 	};
-	struct Uniform2fData {
+	struct Data2f {
 	    GLfloat v0, v1;
-	    size_t hash() const;
 	    void apply(GLint location) const;
 	};
-	struct Uniform3fData {
-	    GLfloat v0, v1, v2;
-	    size_t hash() const;
+	struct Data3f { GLfloat v0, v1, v2;
 	    void apply(GLint location) const;
 	};
-	struct Uniform4fData {
+	struct Data4f {
 	    GLfloat v0, v1, v2, v3;
-	    size_t hash() const;
 	    void apply(GLint location) const;
 	};
-	struct Uniform1iData {
+	struct Data1i {
 	    GLint v0;
-	    size_t hash() const;
 	    void apply(GLint location) const;
 	};
-	struct Uniform2iData {
+	struct Data2i {
 	    GLint v0, v1;
-	    size_t hash() const;
 	    void apply(GLint location) const;
 	};
-	struct Uniform3iData {
+	struct Data3i {
 	    GLint v0, v1, v2;
-	    size_t hash() const;
 	    void apply(GLint location) const;
 	};
-	struct Uniform4iData {
+	struct Data4i {
 	    GLint v0, v1, v2, v3;
-	    size_t hash() const;
 	    void apply(GLint location) const;
 	};
-	struct Uniform1uiData {
+	struct Data1ui {
 	    GLuint v0;
-	    size_t hash() const;
 	    void apply(GLint location) const;
 	};
-	struct Uniform2uiData {
+	struct Data2ui {
 	    GLuint v0, v1;
-	    size_t hash() const;
 	    void apply(GLint location) const;
 	};
-	struct Uniform3uiData {
+	struct Data3ui {
 	    GLuint v0, v1, v2;
-	    size_t hash() const;
 	    void apply(GLint location) const;
 	};
-	struct Uniform4uiData {
+	struct Data4ui {
 	    GLuint v0, v1, v2, v3;
-	    size_t hash() const;
 	    void apply(GLint location) const;
 	};
-	struct Uniform1fvData {
-	    GLsizei count;
-	    const GLfloat* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct Uniform2fvData {
-	    GLsizei count;
-	    const GLfloat* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct Uniform3fvData {
-	    GLsizei count;
-	    const GLfloat* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct Uniform4fvData {
-	    GLsizei count;
-	    const GLfloat* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct Uniform1ivData {
-	    GLsizei count;
-	    const GLint* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct Uniform2ivData {
-	    GLsizei count;
-	    const GLint* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct Uniform3ivData {
-	    GLsizei count;
-	    const GLint* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct Uniform4ivData {
-	    GLsizei count;
-	    const GLint* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct Uniform1uivData {
-	    GLsizei count;
-	    const GLuint* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct Uniform2uivData {
-	    GLsizei count;
-	    const GLuint* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct Uniform3uivData {
-	    GLsizei count;
-	    const GLuint* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct Uniform4uivData {
-	    GLsizei count;
-	    const GLuint* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct UniformMatrix2fvData {
-	    GLsizei count;
-	    GLboolean transpose;
-	    const GLfloat* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct UniformMatrix3fvData {
-	    GLsizei count;
-	    GLboolean transpose;
-	    const GLfloat* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct UniformMatrix4fvData {
-	    GLsizei count;
-	    GLboolean transpose;
-	    const GLfloat* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct UniformMatrix2x3fvData {
-	    GLsizei count;
-	    GLboolean transpose;
-	    const GLfloat* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct UniformMatrix3x2fvData {
-	    GLsizei count;
-	    GLboolean transpose;
-	    const GLfloat* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct UniformMatrix2x4fvData {
-	    GLsizei count;
-	    GLboolean transpose;
-	    const GLfloat* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct UniformMatrix4x2fvData {
-	    GLsizei count;
-	    GLboolean transpose;
-	    const GLfloat* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct UniformMatrix3x4fvData {
-	    GLsizei count;
-	    GLboolean transpose;
-	    const GLfloat* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
-	struct UniformMatrix4x3fvData {
-	    GLsizei count;
-	    GLboolean transpose;
-	    const GLfloat* value;
-	    size_t hash() const;
-	    void apply(GLint location) const;
-	};
+	// struct Data1fv {
+	//     GLsizei count;
+	//     const GLfloat* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct Data2fv {
+	//     GLsizei count;
+	//     const GLfloat* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct Data3fv {
+	//     GLsizei count;
+	//     const GLfloat* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct Data4fv {
+	//     GLsizei count;
+	//     const GLfloat* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct Data1iv {
+	//     GLsizei count;
+	//     const GLint* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct Data2iv {
+	//     GLsizei count;
+	//     const GLint* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct Data3iv {
+	//     GLsizei count;
+	//     const GLint* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct Data4iv {
+	//     GLsizei count;
+	//     const GLint* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct Data1uiv {
+	//     GLsizei count;
+	//     const GLuint* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct Data2uiv {
+	//     GLsizei count;
+	//     const GLuint* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct Data3uiv {
+	//     GLsizei count;
+	//     const GLuint* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct Data4uiv {
+	//     GLsizei count;
+	//     const GLuint* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct DataMatrix2fv {
+	//     GLsizei count;
+	//     GLboolean transpose;
+	//     const GLfloat* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct DataMatrix3fv {
+	//     GLsizei count;
+	//     GLboolean transpose;
+	//     const GLfloat* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct DataMatrix4fv {
+	//     GLsizei count;
+	//     GLboolean transpose;
+	//     const GLfloat* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct DataMatrix2x3fv {
+	//     GLsizei count;
+	//     GLboolean transpose;
+	//     const GLfloat* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct DataMatrix3x2fv {
+	//     GLsizei count;
+	//     GLboolean transpose;
+	//     const GLfloat* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct DataMatrix2x4fv {
+	//     GLsizei count;
+	//     GLboolean transpose;
+	//     const GLfloat* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct DataMatrix4x2fv {
+	//     GLsizei count;
+	//     GLboolean transpose;
+	//     const GLfloat* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct DataMatrix3x4fv {
+	//     GLsizei count;
+	//     GLboolean transpose;
+	//     const GLfloat* value;
+	//     void apply(GLint location) const;
+	// };
+	// struct DataMatrix4x3fv {
+	//     GLsizei count;
+	//     GLboolean transpose;
+	//     const GLfloat* value;
+	//     void apply(GLint location) const;
+	// };
 	using UniformData = std::variant<
-        Uniform1fData, Uniform2fData, Uniform3fData, Uniform4fData,
-        Uniform1iData, Uniform2iData, Uniform3iData, Uniform4iData,
-        Uniform1uiData, Uniform2uiData, Uniform3uiData, Uniform4uiData,
-        Uniform1fvData, Uniform2fvData, Uniform3fvData, Uniform4fvData,
-        Uniform1ivData, Uniform2ivData, Uniform3ivData, Uniform4ivData,
-        Uniform1uivData, Uniform2uivData, Uniform3uivData, Uniform4uivData,
-        UniformMatrix2fvData, UniformMatrix3fvData, UniformMatrix4fvData,
-        UniformMatrix2x3fvData, UniformMatrix3x2fvData, UniformMatrix2x4fvData,
-        UniformMatrix4x2fvData, UniformMatrix3x4fvData, UniformMatrix4x3fvData>;
+        Data1f, Data2f, Data3f, Data4f,
+        Data1i, Data2i, Data3i, Data4i,
+        Data1ui, Data2ui, Data3ui, Data4ui>;
+        // Data1fv, Data2fv, Data3fv, Data4fv,
+        // Data1iv, Data2iv, Data3iv, Data4iv,
+        // Data1uiv, Data2uiv, Data3uiv, Data4uiv,
+        // DataMatrix2fv, DataMatrix3fv, DataMatrix4fv,
+        // DataMatrix2x3fv, DataMatrix3x2fv, DataMatrix2x4fv,
+        // DataMatrix4x2fv, DataMatrix3x4fv, DataMatrix4x3fv>;
 
 		void applyUniform(const std::string& name, const UniformData& data);
 };

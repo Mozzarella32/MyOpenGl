@@ -3,6 +3,7 @@
 #include "Utilities.hpp"
 #include <functional>
 #include <variant>
+#include <ranges>
 
 GLuint Shader::compile(const std::string &shaderSource, GLenum type,
                        ErrorHandler err) {
@@ -146,10 +147,11 @@ void Shader::unbind() {
 
 const GLuint &Shader::GetId() const { return shaderId; }
 
-template<typename T>
-concept hashable = requires (const T t) {
-  { t.hash() } -> std::same_as<size_t>;
-};
+template <class T>
+static inline void hash_combine(std::size_t& seed, const T& v) {
+    std::hash<T> hasher;
+    seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
+}
 
 template<typename T>
 concept applyable = requires (const T tconst, GLint location) {
@@ -165,8 +167,14 @@ void Shader::applyUniform(const std::string& name, const UniformData& data){
 	auto& info = it->second;
 
   Visitor hasher{
-    [](const hashable auto & h) {
-      return h.hash();
+    []<typename T>(const T& t) {
+      constexpr std::size_t size = sizeof(T) / 4;
+      const auto& arr = std::bit_cast<std::array<std::uint32_t,size>>(t);
+      std::size_t s = 0;
+      for(const auto& elem : arr) {
+        hash_combine(s, elem);
+      }
+      return s;
     }
   };
 
@@ -185,311 +193,134 @@ void Shader::applyUniform(const std::string& name, const UniformData& data){
 	std::visit(applyer, data);
 }
 
-template <class T>
-static inline void hash_combine(std::size_t& seed, const T& v) {
-    std::hash<T> hasher;
-    seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
-}
-
-size_t Shader::Uniform1fData::hash() const { return std::hash<GLfloat>{}(v0); }
-void Shader::Uniform1fData::apply(GLint location) const {
+void Shader::Data1f::apply(GLint location) const {
   GLCALL(glUniform1f(location, v0));
 }
 
-size_t Shader::Uniform2fData::hash() const {
-  auto s = std::hash<GLfloat>{}(v0);
-  hash_combine(s, v1);
-  return s;
-}
-void Shader::Uniform2fData::apply(GLint location) const {
+void Shader::Data2f::apply(GLint location) const {
   GLCALL(glUniform2f(location, v0, v1));
 }
 
-size_t Shader::Uniform3fData::hash() const {
-  auto s = std::hash<GLfloat>{}(v0);
-  hash_combine(s, v1);
-  hash_combine(s, v2);
-  return s;
-}
-void Shader::Uniform3fData::apply(GLint location) const {
+void Shader::Data3f::apply(GLint location) const {
   GLCALL(glUniform3f(location, v0, v1, v2));
 }
 
-size_t Shader::Uniform4fData::hash() const {
-  auto s = std::hash<GLfloat>{}(v0);
-  hash_combine(s, v1);
-  hash_combine(s, v2);
-  hash_combine(s, v3);
-  return s;
-}
-void Shader::Uniform4fData::apply(GLint location) const {
+void Shader::Data4f::apply(GLint location) const {
   GLCALL(glUniform4f(location, v0, v1, v2, v3));
 }
 
-size_t Shader::Uniform1iData::hash() const { return std::hash<GLint>{}(v0); }
-void Shader::Uniform1iData::apply(GLint location) const {
+void Shader::Data1i::apply(GLint location) const {
   GLCALL(glUniform1i(location, v0));
 }
 
-size_t Shader::Uniform2iData::hash() const {
-  auto s = std::hash<GLint>{}(v0);
-  hash_combine(s, v1);
-  return s;
-}
-void Shader::Uniform2iData::apply(GLint location) const {
+void Shader::Data2i::apply(GLint location) const {
   GLCALL(glUniform2i(location, v0, v1));
 }
 
-size_t Shader::Uniform3iData::hash() const {
-  auto s = std::hash<GLint>{}(v0);
-  hash_combine(s, v1);
-  hash_combine(s, v2);
-  return s;
-}
-void Shader::Uniform3iData::apply(GLint location) const {
+void Shader::Data3i::apply(GLint location) const {
   GLCALL(glUniform3i(location, v0, v1, v2));
 }
 
-size_t Shader::Uniform4iData::hash() const {
-  auto s = std::hash<GLint>{}(v0);
-  hash_combine(s, v1);
-  hash_combine(s, v2);
-  hash_combine(s, v3);
-  return s;
-}
-void Shader::Uniform4iData::apply(GLint location) const {
+void Shader::Data4i::apply(GLint location) const {
   GLCALL(glUniform4i(location, v0, v1, v2, v3));
 }
 
-size_t Shader::Uniform1uiData::hash() const { return std::hash<GLuint>{}(v0); }
-void Shader::Uniform1uiData::apply(GLint location) const {
+void Shader::Data1ui::apply(GLint location) const {
   GLCALL(glUniform1ui(location, v0));
 }
 
-size_t Shader::Uniform2uiData::hash() const {
-  auto s = std::hash<GLuint>{}(v0);
-  hash_combine(s, v1);
-  return s;
-}
-void Shader::Uniform2uiData::apply(GLint location) const {
+void Shader::Data2ui::apply(GLint location) const {
   GLCALL(glUniform2ui(location, v0, v1));
 }
 
-size_t Shader::Uniform3uiData::hash() const {
-  auto s = std::hash<GLuint>{}(v0);
-  hash_combine(s, v1);
-  hash_combine(s, v2);
-  return s;
-}
-void Shader::Uniform3uiData::apply(GLint location) const {
+void Shader::Data3ui::apply(GLint location) const {
   GLCALL(glUniform3ui(location, v0, v1, v2));
 }
 
-size_t Shader::Uniform4uiData::hash() const {
-  auto s = std::hash<GLuint>{}(v0);
-  hash_combine(s, v1);
-  hash_combine(s, v2);
-  hash_combine(s, v3);
-  return s;
-}
-void Shader::Uniform4uiData::apply(GLint location) const {
+void Shader::Data4ui::apply(GLint location) const {
   GLCALL(glUniform4ui(location, v0, v1, v2, v3));
 }
 
-size_t Shader::Uniform1fvData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::Uniform1fvData::apply(GLint location) const {
-  GLCALL(glUniform1fv(location, count, value));
-}
+// void Shader::Uniform1fvData::apply(GLint location) const {
+//   GLCALL(glUniform1fv(location, count, value));
+// }
 
-size_t Shader::Uniform2fvData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::Uniform2fvData::apply(GLint location) const {
-  GLCALL(glUniform2fv(location, count, value));
-}
+// void Shader::Uniform2fvData::apply(GLint location) const {
+//   GLCALL(glUniform2fv(location, count, value));
+// }
 
-size_t Shader::Uniform3fvData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::Uniform3fvData::apply(GLint location) const {
-  GLCALL(glUniform3fv(location, count, value));
-}
+// void Shader::Uniform3fvData::apply(GLint location) const {
+//   GLCALL(glUniform3fv(location, count, value));
+// }
 
-size_t Shader::Uniform4fvData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::Uniform4fvData::apply(GLint location) const {
-  GLCALL(glUniform4fv(location, count, value));
-}
+// void Shader::Uniform4fvData::apply(GLint location) const {
+//   GLCALL(glUniform4fv(location, count, value));
+// }
 
-size_t Shader::Uniform1ivData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::Uniform1ivData::apply(GLint location) const {
-  GLCALL(glUniform1iv(location, count, value));
-}
+// void Shader::Uniform1ivData::apply(GLint location) const {
+//   GLCALL(glUniform1iv(location, count, value));
+// }
 
-size_t Shader::Uniform2ivData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::Uniform2ivData::apply(GLint location) const {
-  GLCALL(glUniform2iv(location, count, value));
-}
+// void Shader::Uniform2ivData::apply(GLint location) const {
+//   GLCALL(glUniform2iv(location, count, value));
+// }
 
-size_t Shader::Uniform3ivData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::Uniform3ivData::apply(GLint location) const {
-  GLCALL(glUniform3iv(location, count, value));
-}
+// void Shader::Uniform3ivData::apply(GLint location) const {
+//   GLCALL(glUniform3iv(location, count, value));
+// }
 
-size_t Shader::Uniform4ivData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::Uniform4ivData::apply(GLint location) const {
-  GLCALL(glUniform4iv(location, count, value));
-}
+// void Shader::Uniform4ivData::apply(GLint location) const {
+//   GLCALL(glUniform4iv(location, count, value));
+// }
 
-size_t Shader::Uniform1uivData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::Uniform1uivData::apply(GLint location) const {
-  GLCALL(glUniform1uiv(location, count, value));
-}
+// void Shader::Uniform1uivData::apply(GLint location) const {
+//   GLCALL(glUniform1uiv(location, count, value));
+// }
 
-size_t Shader::Uniform2uivData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::Uniform2uivData::apply(GLint location) const {
-  GLCALL(glUniform2uiv(location, count, value));
-}
+// void Shader::Uniform2uivData::apply(GLint location) const {
+//   GLCALL(glUniform2uiv(location, count, value));
+// }
 
-size_t Shader::Uniform3uivData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::Uniform3uivData::apply(GLint location) const {
-  GLCALL(glUniform3uiv(location, count, value));
-}
+// void Shader::Uniform3uivData::apply(GLint location) const {
+//   GLCALL(glUniform3uiv(location, count, value));
+// }
 
-size_t Shader::Uniform4uivData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::Uniform4uivData::apply(GLint location) const {
-  GLCALL(glUniform4uiv(location, count, value));
-}
+// void Shader::Uniform4uivData::apply(GLint location) const {
+//   GLCALL(glUniform4uiv(location, count, value));
+// }
 
-size_t Shader::UniformMatrix2fvData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, transpose);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::UniformMatrix2fvData::apply(GLint location) const {
-  GLCALL(glUniformMatrix2fv(location, count, transpose, value));
-}
+// void Shader::UniformMatrix2fvData::apply(GLint location) const {
+//   GLCALL(glUniformMatrix2fv(location, count, transpose, value));
+// }
 
-size_t Shader::UniformMatrix3fvData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, transpose);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::UniformMatrix3fvData::apply(GLint location) const {
-  GLCALL(glUniformMatrix3fv(location, count, transpose, value));
-}
+// void Shader::UniformMatrix3fvData::apply(GLint location) const {
+//   GLCALL(glUniformMatrix3fv(location, count, transpose, value));
+// }
 
-size_t Shader::UniformMatrix4fvData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, transpose);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::UniformMatrix4fvData::apply(GLint location) const {
-  GLCALL(glUniformMatrix4fv(location, count, transpose, value));
-}
+// void Shader::UniformMatrix4fvData::apply(GLint location) const {
+//   GLCALL(glUniformMatrix4fv(location, count, transpose, value));
+// }
 
-size_t Shader::UniformMatrix2x3fvData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, transpose);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::UniformMatrix2x3fvData::apply(GLint location) const {
-  GLCALL(glUniformMatrix2x3fv(location, count, transpose, value));
-}
+// void Shader::UniformMatrix2x3fvData::apply(GLint location) const {
+//   GLCALL(glUniformMatrix2x3fv(location, count, transpose, value));
+// }
 
-size_t Shader::UniformMatrix3x2fvData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, transpose);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::UniformMatrix3x2fvData::apply(GLint location) const {
-  GLCALL(glUniformMatrix3x2fv(location, count, transpose, value));
-}
+// void Shader::UniformMatrix3x2fvData::apply(GLint location) const {
+//   GLCALL(glUniformMatrix3x2fv(location, count, transpose, value));
+// }
 
-size_t Shader::UniformMatrix2x4fvData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, transpose);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::UniformMatrix2x4fvData::apply(GLint location) const {
-  GLCALL(glUniformMatrix2x4fv(location, count, transpose, value));
-}
+// void Shader::UniformMatrix2x4fvData::apply(GLint location) const {
+//   GLCALL(glUniformMatrix2x4fv(location, count, transpose, value));
+// }
 
-size_t Shader::UniformMatrix4x2fvData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, transpose);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::UniformMatrix4x2fvData::apply(GLint location) const {
-  GLCALL(glUniformMatrix4x2fv(location, count, transpose, value));
-}
+// void Shader::UniformMatrix4x2fvData::apply(GLint location) const {
+//   GLCALL(glUniformMatrix4x2fv(location, count, transpose, value));
+// }
 
-size_t Shader::UniformMatrix3x4fvData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, transpose);
-  hash_combine(s, value);
-  return s;
-}
-void Shader::UniformMatrix3x4fvData::apply(GLint location) const {
-  GLCALL(glUniformMatrix3x4fv(location, count, transpose, value));
-}
+// void Shader::UniformMatrix3x4fvData::apply(GLint location) const {
+//   GLCALL(glUniformMatrix3x4fv(location, count, transpose, value));
+// }
 
-size_t Shader::UniformMatrix4x3fvData::hash() const {
-  auto s = std::hash<GLsizei>{}(count);
-  hash_combine(s, transpose);
-  hash_combine(s,value);
-  return s;
-}
-void Shader::UniformMatrix4x3fvData::apply(GLint location) const {
-  GLCALL(glUniformMatrix4x3fv(location, count, transpose, value));
-}
+// void Shader::UniformMatrix4x3fvData::apply(GLint location) const {
+//   GLCALL(glUniformMatrix4x3fv(location, count, transpose, value));
+// }
