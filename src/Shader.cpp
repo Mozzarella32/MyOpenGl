@@ -137,9 +137,9 @@ Shader::Shader(ErrorHandler err, const std::string &vertexShader,
 
 Shader::~Shader() { GLCALL(glDeleteProgram(shaderId)); }
 
-void Shader::bind() { GLCALL(glUseProgram(shaderId)); }
+void Shader::bind() const { GLCALL(glUseProgram(shaderId)); }
 
-void Shader::unbind() {
+void Shader::unbind() const {
 #ifndef NDEBUG
   GLCALL(glUseProgram(0));
 #endif
@@ -166,7 +166,7 @@ concept applyable = requires (const T tconst, GLint location) {
   { tconst.apply(location) } -> std::same_as<void>;
 };
 
-void Shader::apply(const std::string& name, const UniformData& data){
+void Shader::apply(const std::string& name, const UniformData& data) {
 	auto it = uniformInfo.find(name);
 	if (it == uniformInfo.end()) {
 		ERRORLOG("Uniform not active or not existent");

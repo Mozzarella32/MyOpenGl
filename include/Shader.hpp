@@ -20,9 +20,9 @@ private:
 
 	std::unordered_map<std::string, UniformInfo> uniformInfo;
 
-	GLuint compile(const std::string& shaderSource, GLenum type, ErrorHandler err);
+	static GLuint compile(const std::string& shaderSource, GLenum type, ErrorHandler err);
 
-	std::string parse(const std::filesystem::path& filename, ErrorHandler err);
+	static std::string parse(const std::filesystem::path& filename, ErrorHandler err);
 
 public:
 
@@ -39,8 +39,8 @@ public:
 
 	virtual ~Shader();
 
-	void bind();
-	void unbind();
+	void bind() const;
+	void unbind() const;
 
 	const GLuint& GetId() const;
 
