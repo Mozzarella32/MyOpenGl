@@ -44,7 +44,7 @@ public:
 
 	const GLuint& GetId() const;
 
-	bool hasUniform(const std::string& name) const;
+	GLint uniformLocation(const std::string& name) const;
 
 	struct Data1f {
 	    GLfloat v0;

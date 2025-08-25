@@ -147,8 +147,12 @@ void Shader::unbind() {
 
 const GLuint &Shader::GetId() const { return shaderId; }
 
-bool Shader::hasUniform(const std::string& name) const {
-  return uniformInfo.contains(name);
+GLint Shader::uniformLocation(const std::string& name) const {
+  auto it = uniformInfo.find(name);
+  if(it == uniformInfo.end()) {
+    return -1;
+  }
+  return it->second.location;
 }
 
 template <class T>
