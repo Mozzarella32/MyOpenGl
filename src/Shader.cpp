@@ -147,6 +147,10 @@ void Shader::unbind() {
 
 const GLuint &Shader::GetId() const { return shaderId; }
 
+bool Shader::hasUniform(const std::string& name) const {
+  return uniformInfo.contains(name);
+}
+
 template <class T>
 static inline void hash_combine(std::size_t& seed, const T& v) {
     std::hash<T> hasher;
