@@ -277,87 +277,87 @@ void Shader::Data4ui::apply(GLint location) const {
   GLCALL(glUniform4ui(location, v0, v1, v2, v3));
 }
 
-void Shader::Uniform1fvData::apply(GLint location) const {
+void Shader::Data1fv::apply(GLint location) const {
   GLCALL(glUniform1fv(location, count, value));
 }
 
-void Shader::Uniform2fvData::apply(GLint location) const {
+void Shader::Data2fv::apply(GLint location) const {
   GLCALL(glUniform2fv(location, count, value));
 }
 
-void Shader::Uniform3fvData::apply(GLint location) const {
+void Shader::Data3fv::apply(GLint location) const {
   GLCALL(glUniform3fv(location, count, value));
 }
 
-void Shader::Uniform4fvData::apply(GLint location) const {
+void Shader::Data4fv::apply(GLint location) const {
   GLCALL(glUniform4fv(location, count, value));
 }
 
-void Shader::Uniform1ivData::apply(GLint location) const {
+void Shader::Data1iv::apply(GLint location) const {
   GLCALL(glUniform1iv(location, count, value));
 }
 
-void Shader::Uniform2ivData::apply(GLint location) const {
+void Shader::Data2iv::apply(GLint location) const {
   GLCALL(glUniform2iv(location, count, value));
 }
 
-void Shader::Uniform3ivData::apply(GLint location) const {
+void Shader::Data3iv::apply(GLint location) const {
   GLCALL(glUniform3iv(location, count, value));
 }
 
-void Shader::Uniform4ivData::apply(GLint location) const {
+void Shader::Data4iv::apply(GLint location) const {
   GLCALL(glUniform4iv(location, count, value));
 }
 
-void Shader::Uniform1uivData::apply(GLint location) const {
+void Shader::Data1uiv::apply(GLint location) const {
   GLCALL(glUniform1uiv(location, count, value));
 }
 
-void Shader::Uniform2uivData::apply(GLint location) const {
+void Shader::Data2uiv::apply(GLint location) const {
   GLCALL(glUniform2uiv(location, count, value));
 }
 
-void Shader::Uniform3uivData::apply(GLint location) const {
+void Shader::Data3uiv::apply(GLint location) const {
   GLCALL(glUniform3uiv(location, count, value));
 }
 
-void Shader::Uniform4uivData::apply(GLint location) const {
+void Shader::Data4uiv::apply(GLint location) const {
   GLCALL(glUniform4uiv(location, count, value));
 }
 
-void Shader::UniformMatrix2fvData::apply(GLint location) const {
+void Shader::DataMatrix2fv::apply(GLint location) const {
   GLCALL(glUniformMatrix2fv(location, count, transpose, value));
 }
 
-void Shader::UniformMatrix3fvData::apply(GLint location) const {
+void Shader::DataMatrix3fv::apply(GLint location) const {
   GLCALL(glUniformMatrix3fv(location, count, transpose, value));
 }
 
-void Shader::UniformMatrix4fvData::apply(GLint location) const {
+void Shader::DataMatrix4fv::apply(GLint location) const {
   GLCALL(glUniformMatrix4fv(location, count, transpose, value));
 }
 
-void Shader::UniformMatrix2x3fvData::apply(GLint location) const {
+void Shader::DataMatrix2x3fv::apply(GLint location) const {
   GLCALL(glUniformMatrix2x3fv(location, count, transpose, value));
 }
 
-void Shader::UniformMatrix3x2fvData::apply(GLint location) const {
+void Shader::DataMatrix3x2fv::apply(GLint location) const {
   GLCALL(glUniformMatrix3x2fv(location, count, transpose, value));
 }
 
-void Shader::UniformMatrix2x4fvData::apply(GLint location) const {
+void Shader::DataMatrix2x4fv::apply(GLint location) const {
   GLCALL(glUniformMatrix2x4fv(location, count, transpose, value));
 }
 
-void Shader::UniformMatrix4x2fvData::apply(GLint location) const {
+void Shader::DataMatrix4x2fv::apply(GLint location) const {
   GLCALL(glUniformMatrix4x2fv(location, count, transpose, value));
 }
 
-void Shader::UniformMatrix3x4fvData::apply(GLint location) const {
+void Shader::DataMatrix3x4fv::apply(GLint location) const {
   GLCALL(glUniformMatrix3x4fv(location, count, transpose, value));
 }
 
-void Shader::UniformMatrix4x3fvData::apply(GLint location) const {
+void Shader::DataMatrix4x3fv::apply(GLint location) const {
   GLCALL(glUniformMatrix4x3fv(location, count, transpose, value));
 }
 
