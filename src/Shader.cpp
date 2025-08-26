@@ -3,6 +3,7 @@
 #include "Utilities.hpp"
 #include <functional>
 #include <type_traits>
+#include <utility>
 #include <variant>
 
 GLuint Shader::compile(const std::string &shaderSource, GLenum type,
@@ -135,7 +136,17 @@ Shader::Shader(ErrorHandler err, const std::string &vertexShader,
   }
 }
 
-Shader::~Shader() { GLCALL(glDeleteProgram(shaderId)); }
+Shader& Shader::operator=(Shader&& other) {
+  shaderId = std::exchange(other.shaderId, 0);
+  uniformInfo = std::exchange(other.uniformInfo, {});
+  return *this;
+}
+
+Shader::~Shader() {
+  if(shaderId != 0) {
+    GLCALL(glDeleteProgram(shaderId));
+  }
+}
 
 void Shader::bind() const { GLCALL(glUseProgram(shaderId)); }
 
