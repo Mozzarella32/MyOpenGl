@@ -33,9 +33,7 @@ public:
 	Shader(ErrorHandler err, const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader = {});
 
 	Shader(const Shader&) = delete;
-	Shader(Shader&&) = delete;
 	Shader& operator=(const Shader&) = delete;
-	Shader& operator=(Shader&&) = delete;
 
 	virtual ~Shader();
 
