@@ -19,8 +19,8 @@ public:
 	using ShaderSource = std::variant<std::filesystem::path, std::string>;
 
 	struct ShaderInfo {
-		ShaderSource source;
 		ShaderType type;
+		ShaderSource source;
 	};
 
 private:
