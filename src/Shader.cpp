@@ -68,18 +68,22 @@ Shader::Shader(ErrorHandler err, const std::vector<ShaderInfo>& shaders) {
       return parse(path, err);
     }
   };
-  const auto shaderContents = shaders
-    | std::views::transform([shaderReader](const ShaderInfo &si) {
-        return std::make_tuple(si.type,std::visit(shaderReader, si.source));
-      })
-    | std::ranges::to<std::vector>();
 
-  const auto shaderIds = shaderContents
-    | std::views::transform([this, err](std::tuple<ShaderType, std::string> si) {
-          const auto[type, content] = si;
-          return compile(content, shaderTypeToGlEnum.at((unsigned char)type), err);
-        })
-    | std::ranges::to<std::vector>();
+  std::vector<std::tuple<ShaderType, std::string>> shaderContents;
+  shaderContents.reserve(shaders.size());
+  for (const auto& si : shaders) {
+    shaderContents.push_back(
+      std::make_tuple(si.type, std::visit(shaderReader, si.source))
+    );
+  }
+
+  std::vector<unsigned int> shaderIds;
+  shaderIds.reserve(shaderContents.size());
+  for (const auto& [type, content] : shaderContents) {
+    shaderIds.push_back(
+      compile(content, shaderTypeToGlEnum.at((unsigned char)type), err)
+    );
+  }
 
   for(const auto& id : shaderIds) {
     GLCALL(glAttachShader(shaderId, id));
