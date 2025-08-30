@@ -203,7 +203,7 @@ public:
 	void appendOther(Args&&... Other) {
 		Dirty = true;
 		Vertices.reserve(Vertices.size() + (Other.Vertices.size() + ...));
-		(Append(Other.Vertices), ...);
+		(append(Other.Vertices), ...);
 	}
 
 	bool empty() const {
