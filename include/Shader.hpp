@@ -10,6 +10,32 @@ public:
 	//Arguments: Where the Error occured, the msg;
 	using ErrorHandler = std::function<void(std::string, std::string)>;
 
+	enum class ShaderType : unsigned char {
+		Vertex,
+		Geometry,
+		Fragment,
+	};
+
+	using ShaderSource = std::variant<std::filesystem::path, std::string>;
+
+	struct ShaderInfo {
+		ShaderSource source;
+		ShaderType type;
+	};
+
+private:
+	static const constexpr std::array<GLenum, 3> shaderTypeToGlEnum = {
+		GL_VERTEX_SHADER,
+		GL_GEOMETRY_SHADER,
+		GL_FRAGMENT_SHADER,
+	};
+
+	static const constexpr std::array<std::string_view, 3> shaderTypeToName = {
+		"Vertex",
+		"Geometry",
+		"Fragment",
+	};
+
 private:
 	GLuint shaderId;
 
@@ -26,11 +52,7 @@ private:
 
 public:
 
-	Shader(ErrorHandler err, const std::filesystem::path& vertexShaderFilename, const std::filesystem::path& fragmentShaderFilename, const std::filesystem::path& geometryShaderFilename);
-
-	Shader(ErrorHandler err, const std::filesystem::path& vertexShaderFilename, const std::filesystem::path& fragmentShaderFilename);
-
-	Shader(ErrorHandler err, const std::string& vertexShader, const std::string& fragmentShader, const std::string& geometryShader = {});
+	Shader(ErrorHandler err, const std::vector<ShaderInfo>& shaders);
 
 	Shader(const Shader&) = delete;
 	Shader(Shader&&) = delete;

@@ -163,7 +163,58 @@ public:
 		}
 	}
 };
-//
+
+
+template<class VertexType>
+struct BufferedVertexVec {
+private:
+	std::vector<VertexType> Vertices;
+	bool Dirty = true;
+public:
+
+	void replaceBuffer(VertexArrayObject& VAO, size_t BufferIndex, bool ClearDirty = true) {
+		if (!Dirty)return;
+		VAO.ReplaceVertexBuffer(Vertices, BufferIndex);
+		if (ClearDirty)Dirty = false;
+	}
+
+	void clear() {
+		Dirty = true;
+		Vertices.clear();
+	}
+
+	void append(const VertexType& Vertex) {
+		Dirty = true;
+		Vertices.push_back(Vertex);
+	}
+
+	template<typename ...Args>
+	void emplace(Args&&... args) {
+		Dirty = true;
+		Vertices.emplace_back(std::forward<Args>(args)...);
+	}
+
+	void append(const std::vector<VertexType>& Vertex) {
+		Dirty = true;
+		Vertices.insert(Vertices.end(), Vertex.begin(), Vertex.end());
+	}
+
+	template<typename ...Args>
+	void appendOther(Args&&... Other) {
+		Dirty = true;
+		Vertices.reserve(Vertices.size() + (Other.Vertices.size() + ...));
+		(Append(Other.Vertices), ...);
+	}
+
+	bool empty() const {
+		return Vertices.empty();
+	}
+
+	size_t size() const {
+		return Vertices.size();
+	}
+};
+
 //struct IndexBufferObject {
 //	IndexBufferObject(void* data, uint32_t numIndices, uint8_t elementSize) {
 //		glGenBuffers(1, &bufferId);

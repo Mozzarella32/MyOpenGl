@@ -42,6 +42,7 @@
 #include <algorithm>
 #include <array>
 #include <sstream>
+#include <ranges>
 
 // #include <wx/glcanvas.h>
 

@@ -1,10 +1,6 @@
 #include "Shader.hpp"
 
 #include "Utilities.hpp"
-#include <functional>
-#include <type_traits>
-#include <utility>
-#include <variant>
 
 GLuint Shader::compile(const std::string &shaderSource, GLenum type,
                        ErrorHandler err) {
@@ -52,24 +48,8 @@ std::string Shader::parse(const std::filesystem::path &filename,
   return contentStream.str();
 }
 
-Shader::Shader(ErrorHandler err,
-               const std::filesystem::path &vertexShaderFilename,
-               const std::filesystem::path &fragmentShaderFilename,
-               const std::filesystem::path &geometryShaderFilename)
-    : Shader(err, parse(vertexShaderFilename, err),
-             parse(fragmentShaderFilename, err),
-             parse(geometryShaderFilename, err)) {}
-
-Shader::Shader(ErrorHandler err,
-               const std::filesystem::path &vertexShaderFilename,
-               const std::filesystem::path &fragmentShaderFilename)
-    : Shader(err, parse(vertexShaderFilename, err),
-             parse(fragmentShaderFilename, err)) {}
-
-Shader::Shader(ErrorHandler err, const std::string &vertexShader,
-               const std::string &fragmentShader,
-               const std::string &geometryShader) {
-  shaderId = GLCALL(glCreateProgram());
+Shader::Shader(ErrorHandler err, const std::vector<ShaderInfo>& shaders) {
+  shaderId = glCreateProgram();
   GLenum error = glGetError();
   if (shaderId == 0) {
     if (shaderId == 0) {
@@ -80,17 +60,29 @@ Shader::Shader(ErrorHandler err, const std::string &vertexShader,
     return;
   }
 
-  GLuint vs = compile(vertexShader, GL_VERTEX_SHADER, err);
-  GLuint fs = compile(fragmentShader, GL_FRAGMENT_SHADER, err);
-  GLuint gs = geometryShader.empty()
-                  ? 0
-                  : compile(geometryShader, GL_GEOMETRY_SHADER, err);
+  Visitor shaderReader{
+    [](const std::string content) {
+      return content;
+    },
+    [err](const std::filesystem::path& path) {
+      return parse(path, err);
+    }
+  };
+  const auto shaderContents = shaders
+    | std::views::transform([shaderReader](const ShaderInfo &si) {
+        return std::make_tuple(si.type,std::visit(shaderReader, si.source));
+      })
+    | std::ranges::to<std::vector>();
 
-  GLCALL(glAttachShader(shaderId, vs));
-  GLCALL(glAttachShader(shaderId, fs));
+  const auto shaderIds = shaderContents
+    | std::views::transform([this, err](std::tuple<ShaderType, std::string> si) {
+          const auto[type, content] = si;
+          return compile(content, shaderTypeToGlEnum.at((unsigned char)type), err);
+        })
+    | std::ranges::to<std::vector>();
 
-  if (!geometryShader.empty()) {
-    GLCALL(glAttachShader(shaderId, gs));
+  for(const auto& id : shaderIds) {
+    GLCALL(glAttachShader(shaderId, id));
   }
 
   GLCALL(glLinkProgram(shaderId));
@@ -101,10 +93,14 @@ Shader::Shader(ErrorHandler err, const std::string &vertexShader,
     GLCALL(glGetProgramiv(shaderId, GL_INFO_LOG_LENGTH, &length));
     char *message = new char[length];
     GLCALL(glGetProgramInfoLog(shaderId, length, &length, message));
-    err("Shader Link Error",
-        "Error: " + std::string(message) + "\n Vert: " + vertexShader +
-            "\n Frag: " + fragmentShader +
-            (geometryShader != "" ? "\n Geo: " + geometryShader : ""));
+    std::stringstream s;
+    s << "Error: " <<  message << "\n";
+    for(const auto[type, content] : shaderContents){
+      s << shaderTypeToName.at((unsigned char) type) << " Shader:\n";
+      s << content;
+      s << "\n";
+    }
+    err("Shader Linking Error", s.str());
     delete[] message;
     GLCALL(glDeleteProgram(shaderId));
     return;
@@ -123,16 +119,13 @@ Shader::Shader(ErrorHandler err, const std::string &vertexShader,
   }
 
 #ifndef NDEBUG
-  GLCALL(glDetachShader(shaderId, vs));
-  GLCALL(glDetachShader(shaderId, fs));
-  if (!geometryShader.empty()) {
-    GLCALL(glDetachShader(shaderId, gs));
+  for(const auto& id : shaderIds) {
+    GLCALL(glDetachShader(shaderId, id));
   }
 #endif
-  GLCALL(glDeleteShader(vs));
-  GLCALL(glDeleteShader(fs));
-  if (!geometryShader.empty()) {
-    GLCALL(glDeleteShader(gs));
+
+  for(const auto& id : shaderIds) {
+    GLCALL(glDeleteShader(id));
   }
 }
 
