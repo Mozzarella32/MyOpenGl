@@ -24,15 +24,13 @@ set(LIB_DIR "${PROJECT_SOURCE_DIR}/lib")
 
 set(PCH_HEADERS "${INCLUDE_DIR}/pch.hpp")
 
-file(GLOB_RECURSE MY_SOURCE CONFIGURE_DEPENDS "${SRC_DIR}/*")
-
-file(GLOB_RECURSE MY_HEADERS CONFIGURE_DEPENDS "${INCLUDE_DIR}/*")
-
-source_group("Source Files" FILES ${MY_SOURCE})
-source_group("Header Files" FILES ${MY_HEADERS})
-
-list(REMOVE_ITEM MY_SOURCE ${PCH_HEADERS})
-list(REMOVE_ITEM MY_HEADERS ${PCH_HEADERS})
+set(MY_SOURCE
+     src/pch.cpp
+     src/Shader.cpp
+     src/Texture.cpp
+     src/Utilities.cpp
+     src/VertexBuffer.cpp
+)
 
 if (MSVC)
     set_source_files_properties(${SRC_DIR} /W4 /WX)
@@ -51,9 +49,6 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE
 target_include_directories(${PROJECT_NAME} PUBLIC ${INCLUDE_DIR}
                                                   ${STB_INCLUDE_DIR}
                                                   ${GLAD_INCLUDE_DIR})
-
-# wxWidgets Linking
-# target_link_libraries(${PROJECT_NAME} PUBLIC wx::core wx::base)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
     ${OPENGL_gl_LIBRARY}
