@@ -82,7 +82,7 @@ public:
 
 	void Resize(int Width, int Height, void* pixels = nullptr);
 
-	void bind(Shader& shader, const std::string& TextureUniformName, const std::string& TextureUniformSize, unsigned int Pos) const;
+	void bind(Shader& shader, const std::string& TextureUniformName, const std::string& TextureUniformSize, int Pos) const;
 	void bind() const;
 
 	void unbind() const;

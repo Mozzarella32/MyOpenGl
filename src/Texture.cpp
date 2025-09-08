@@ -89,12 +89,12 @@ void Texture::Resize(int newWidth, int newHeight, void* pixels) {
 	GLCALL(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-void Texture::bind(Shader& shader, const std::string& TextureUniformName, const std::string& TextureUniformSize, unsigned int Pos) const {
+void Texture::bind(Shader& shader, const std::string& TextureUniformName, const std::string& TextureUniformSize, int Pos) const {
 	using namespace std::string_literals;
 	
 	assert(Pos < 32);
 	if (TextureUniformName != ""s)
-		shader.apply(TextureUniformName, Shader::Data1ui{Pos});
+		shader.apply(TextureUniformName, Shader::Data1i{Pos});
 	if (TextureUniformSize != ""s)
 		shader.apply(TextureUniformSize, Shader::Data2f{float(Width), float(Height)});
 
