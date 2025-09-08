@@ -213,6 +213,10 @@ public:
 	size_t size() const {
 		return Vertices.size();
 	}
+
+	VertexType back() const {
+		return Vertices.back();	
+	}
 };
 
 //struct IndexBufferObject {
