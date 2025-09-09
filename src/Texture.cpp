@@ -127,25 +127,34 @@ GLuint Texture::GetId() const {
 
 FrameBufferObject::FrameBufferObject(const std::vector<Texture*>& textures, const std::vector<GLenum>& attatchments)
 	:textures(textures), attatchments(attatchments) {
-	if (textures.size() != attatchments.size()) {
+	std::vector<GLenum> actualAttatchments;
+	for (const GLenum& att : attatchments) {
+		if (att == GL_DEPTH_ATTACHMENT || att == GL_STENCIL_ATTACHMENT || att == GL_DEPTH_STENCIL_ATTACHMENT) continue;
+		actualAttatchments.push_back(att);
+	}
+
+	std::vector<GLenum> nonelessAttatchments;
+	for(const GLenum& att : attatchments) {
+		if (att == GL_NONE) continue;
+		nonelessAttatchments.push_back(att);
+	}
+
+	if (textures.size() != nonelessAttatchments.size()) {
 		std::ofstream o("Error.log", std::ios::app);
 		o << "Framebuffer error: Textures and attatchments size mismatch" << std::endl;
 		TRAP();
 	}
+
 	GLCALL(glGenFramebuffers(1, &FramebufferId));
 	GLCALL(glBindFramebuffer(GL_FRAMEBUFFER, FramebufferId));
 
-	std::vector<GLenum> ActualAttatchments;
-	for (const GLenum& att : attatchments) {
-		if (att == GL_DEPTH_ATTACHMENT || att == GL_STENCIL_ATTACHMENT || att == GL_DEPTH_STENCIL_ATTACHMENT) continue;
-		ActualAttatchments.push_back(att);
-	}
 
-	GLCALL(glDrawBuffers(ActualAttatchments.size(), ActualAttatchments.data()));
+	GLCALL(glDrawBuffers(actualAttatchments.size(), actualAttatchments.data()));
 
 	for (size_t i = 0; i < textures.size(); i++) {
-		GLCALL(glFramebufferTexture2D(GL_FRAMEBUFFER, attatchments[i], GL_TEXTURE_2D, textures[i]->TextureId, 0));
+		GLCALL(glFramebufferTexture2D(GL_FRAMEBUFFER, nonelessAttatchments[i], GL_TEXTURE_2D, textures[i]->TextureId, 0));
 	}
+
 	auto status = GLCALL(glCheckFramebufferStatus(GL_FRAMEBUFFER));
 	if (status != GL_FRAMEBUFFER_COMPLETE) {
 		std::ofstream o("Error.log", std::ios::app);
@@ -219,11 +228,6 @@ void FrameBufferObject::unbind() {
 GLuint FrameBufferObject::GetId() const {
 	return FramebufferId;
 }
-
-//
-//Texture* FrameBufferObject::GetTexture() const {
-//	return texture;
-//}
 
 std::vector<Texture*> FrameBufferObject::GetTextures() const {
 	return textures;
