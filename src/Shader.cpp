@@ -127,6 +127,8 @@ Shader::Shader(ErrorHandler err, const std::vector<ShaderInfo>& shaders, const s
 
       std::ofstream off(binaryLocation.value(), std::ios::binary);
       off.write(binary.data(), length);
+      std::ofstream format(binaryLocation.value().parent_path() / (binaryLocation.value().stem().string() + ".format"));
+      format << std::hex << binaryFormat << "\n";
     }
   }
 
