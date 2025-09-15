@@ -3,6 +3,7 @@
 #include "pch.hpp"
 #include <cstddef>
 #include <functional>
+#include <optional>
 #include <variant>
 
 class Shader {
@@ -53,7 +54,7 @@ private:
 public:
 
 	// specify binaryLocation if you want to save the compiled porgramm somewhere
-	Shader(ErrorHandler err, const std::vector<ShaderInfo>& shaders, const std::optional<std::filesystem::path>& binaryLocation);
+	Shader(ErrorHandler err, const std::vector<ShaderInfo>& shaders, const std::optional<std::filesystem::path>& binaryLocation = std::nullopt);
 
 	Shader(const Shader&) = delete;
 	Shader(Shader&&) = delete;
