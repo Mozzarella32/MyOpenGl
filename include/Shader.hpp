@@ -52,7 +52,8 @@ private:
 
 public:
 
-	Shader(ErrorHandler err, const std::vector<ShaderInfo>& shaders);
+	// specify binaryLocation if you want to save the compiled porgramm somewhere
+	Shader(ErrorHandler err, const std::vector<ShaderInfo>& shaders, const std::optional<std::filesystem::path>& binaryLocation);
 
 	Shader(const Shader&) = delete;
 	Shader(Shader&&) = delete;

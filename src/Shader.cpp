@@ -48,7 +48,7 @@ std::string Shader::parse(const std::filesystem::path &filename,
   return contentStream.str();
 }
 
-Shader::Shader(ErrorHandler err, const std::vector<ShaderInfo>& shaders) {
+Shader::Shader(ErrorHandler err, const std::vector<ShaderInfo>& shaders, const std::optional<std::filesystem::path>& binaryLocation) {
   shaderId = glCreateProgram();
   GLenum error = glGetError();
   if (shaderId == 0) {
@@ -108,6 +108,26 @@ Shader::Shader(ErrorHandler err, const std::vector<ShaderInfo>& shaders) {
     delete[] message;
     GLCALL(glDeleteProgram(shaderId));
     return;
+  }
+
+  if (binaryLocation) {
+    int numFormats = 0;
+    glGetIntegerv(GL_NUM_PROGRAM_BINARY_FORMATS, &numFormats);
+    if(numFormats == 0) {
+      std::ofstream off(binaryLocation.value().parent_path() / "Zero binary formats suppoerted");
+    }
+    else {
+      GLint length = 0;
+      GLCALL(glGetProgramiv(shaderId, GL_PROGRAM_BINARY_LENGTH, &length));
+      std::vector<char> binary(length);
+
+      GLenum binaryFormat = 0;
+      GLCALL(glGetProgramBinary(shaderId, length, &length, &binaryFormat,
+                                binary.data()));
+
+      std::ofstream off(binaryLocation.value(), std::ios::binary);
+      off.write(binary.data(), length);
+    }
   }
 
   GLint numUniforms = 0;
