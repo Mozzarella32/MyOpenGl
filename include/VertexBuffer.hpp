@@ -154,11 +154,11 @@ public:
 		assert(BufferIndex < BufferDescriptors.size());
 		auto& Descriptor = BufferDescriptors[BufferIndex];
 
-		if (Descriptor.NumVerts == Vert.size()) {
+		if (Descriptor.NumVerts == (GLsizei)Vert.size()) {
 			GLCALL(glNamedBufferSubData(Descriptor.VBO, 0, Descriptor.NumVerts * sizeof(VertexType), Vert.data()));
 		}
 		else {
-			Descriptor.NumVerts = Vert.size();
+			Descriptor.NumVerts = (GLsizei)Vert.size();
 			GLCALL(glNamedBufferData(Descriptor.VBO, Descriptor.NumVerts * sizeof(VertexType), Vert.data(), Descriptor.Usage));
 		}
 	}
