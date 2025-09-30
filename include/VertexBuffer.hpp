@@ -123,6 +123,17 @@ public:
 
 };
 
+class PixelBufferObject {
+public:
+	GLuint PBO = 0;
+	GLenum BufferType;
+
+	//Usage for glBufferStorage
+	PixelBufferObject(GLenum Usage, bool FromFBOtoPBO, size_t Bytes);
+
+	void bind();
+	void unbind();
+};
 
 class VertexArrayObject {
 private:

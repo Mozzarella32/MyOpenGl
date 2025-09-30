@@ -1,5 +1,22 @@
 #include "VertexBuffer.hpp"
 
+
+PixelBufferObject::PixelBufferObject(GLenum Usage, bool FromFBOtoPBO, size_t Bytes) {
+	GLCALL(glGenBuffers(1, &PBO));
+	BufferType = FromFBOtoPBO ? GL_PIXEL_PACK_BUFFER : GL_PIXEL_UNPACK_BUFFER;
+	GLCALL(glBindBuffer(BufferType, PBO));
+	GLCALL(glBufferStorage(BufferType, Bytes, 0, Usage));
+	GLCALL(glBindBuffer(BufferType, 0));
+}
+
+void PixelBufferObject::bind() {
+	GLCALL(glBindBuffer(BufferType, PBO));
+}
+
+void PixelBufferObject::unbind() {
+	GLCALL(glBindBuffer(BufferType, 0));
+}
+
 VertexArrayObject::VertexArrayObject(std::vector<VertexBufferObjectDescriptor> InitialBufferDescriptors) :BufferDescriptors(InitialBufferDescriptors) {
 	GLCALL(glGenVertexArrays(1, &VAO));
 	GLCALL(glBindVertexArray(VAO));
