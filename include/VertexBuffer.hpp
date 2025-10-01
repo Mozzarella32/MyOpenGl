@@ -128,11 +128,14 @@ public:
 	GLuint PBO = 0;
 	GLenum BufferType;
 
-	//Usage for glBufferStorage
-	PixelBufferObject(GLenum Usage, bool FromFBOtoPBO, size_t Bytes);
+	// StaticSize: glBufferStorage
+	// else:       glBufferData
+	PixelBufferObject(bool StaticSize, GLenum Usage, bool FromFBOtoPBO, size_t Bytes);
 
 	void bind();
 	void unbind();
+
+	~PixelBufferObject();
 };
 
 class VertexArrayObject {

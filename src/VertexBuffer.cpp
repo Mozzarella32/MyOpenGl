@@ -1,11 +1,16 @@
 #include "VertexBuffer.hpp"
 
 
-PixelBufferObject::PixelBufferObject(GLenum Usage, bool FromFBOtoPBO, size_t Bytes) {
+PixelBufferObject::PixelBufferObject(bool StaticSize, GLenum Usage, bool FromFBOtoPBO, size_t Bytes) {
 	GLCALL(glGenBuffers(1, &PBO));
 	BufferType = FromFBOtoPBO ? GL_PIXEL_PACK_BUFFER : GL_PIXEL_UNPACK_BUFFER;
 	GLCALL(glBindBuffer(BufferType, PBO));
-	GLCALL(glBufferStorage(BufferType, Bytes, 0, Usage));
+	if(StaticSize) {
+		GLCALL(glBufferStorage(BufferType, Bytes, 0, Usage));
+	}
+	else {
+		GLCALL(glBufferData(BufferType, Bytes, 0, Usage));
+	}
 	GLCALL(glBindBuffer(BufferType, 0));
 }
 
@@ -17,6 +22,10 @@ void PixelBufferObject::unbind() {
 	GLCALL(glBindBuffer(BufferType, 0));
 }
 
+PixelBufferObject::~PixelBufferObject() {
+	GLCALL(glDeleteBuffers(1, &PBO));
+}
+	
 VertexArrayObject::VertexArrayObject(std::vector<VertexBufferObjectDescriptor> InitialBufferDescriptors) :BufferDescriptors(InitialBufferDescriptors) {
 	GLCALL(glGenVertexArrays(1, &VAO));
 	GLCALL(glBindVertexArray(VAO));
@@ -30,13 +39,9 @@ VertexArrayObject::VertexArrayObject(std::vector<VertexBufferObjectDescriptor> I
 
 		BufferDescriptor.PrepareVBO(AttributePosition);
 
-#ifndef NDEBUG
 		GLCALL(glBindBuffer(GL_ARRAY_BUFFER, 0));
-#endif
 	}
-#ifndef NDEBUG
 	GLCALL(glBindVertexArray(0));
-#endif
 }
 
 VertexArrayObject::VertexArrayObject(VertexArrayObject&& Other) noexcept
@@ -64,9 +69,7 @@ void VertexArrayObject::bind() {
 }
 
 void VertexArrayObject::unbind() {
-#ifndef NDEBUG
 	GLCALL(glBindVertexArray(0));
-#endif
 }
 
 void VertexArrayObject::DrawAs(GLenum mode) {
